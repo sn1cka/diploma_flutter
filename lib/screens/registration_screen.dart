@@ -26,16 +26,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
+    return SafeArea(
+        child: SingleChildScrollView(
+            child: Center(
+                child: Column(
       children: [
         Text('Регистрация'),
-        Padding(padding: EdgeInsets.all(20), child: TextField()),
-        Padding(padding: EdgeInsets.all(20), child: TextField()),
-        Padding(padding: EdgeInsets.all(20), child: TextField()),
-        Padding(padding: EdgeInsets.all(20), child: TextField()),
+        Padding(padding: EdgeInsets.all(16), child: TextField()),
+        Padding(padding: EdgeInsets.all(16), child: TextField()),
+        Padding(padding: EdgeInsets.all(16), child: TextField()),
+        Padding(padding: EdgeInsets.all(16), child: TextField()),
         Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(16),
             child: Checkbox(
               onChanged: (bool? value) {
                 setState(() {
@@ -45,18 +47,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
               value: getEmails,
             )),
         Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: () {},
               child: Text('Далее'),
             )),
         Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: () {},
               child: Text('Отмена'),
             )),
       ],
-    ));
+    ))));
   }
 }

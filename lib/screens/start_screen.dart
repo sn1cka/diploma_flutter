@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_app/screens/registration_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({Key? key}) : super(key: key);
@@ -14,30 +15,42 @@ class StartScreen extends StatelessWidget {
         fit: BoxFit.cover,
         width: double.infinity,
       ),
+      Positioned(
+          top: 300.h,
+          left: 20,
+          right: 20,
+          child: Column(children: [
+            Text('Discover', style: TextStyle(fontSize: 72.sp, color: Colors.white)),
+            Text('Kyrgyzstan', style: TextStyle(fontSize: 72.sp, color: Colors.white))
+          ])),
       Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Padding(
-              padding: EdgeInsets.all(8),
-              child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => MainScreen(),
-                        ),
-                        (route) => false);
-                  },
-                  child: Text('Вход'))),
+              padding: EdgeInsets.all(16.w),
+              child: SizedBox.fromSize(
+                  size: Size(1.sw, 50.w),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => MainScreen(),
+                            ),
+                            (route) => false);
+                      },
+                      child: Text('Вход')))),
           Padding(
-              padding: EdgeInsets.fromLTRB(16, 8, 16, 48),
-              child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => RegistrationScreen(),
-                    ));
-                  },
-                  child: Text('Регистрация'))),
+              padding: EdgeInsets.fromLTRB(16.w, 8.w, 16.w, 48.w),
+              child: SizedBox.fromSize(
+                  size: Size(1.sw, 50.w),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => RegistrationScreen(),
+                        ));
+                      },
+                      child: Text('Регистрация')))),
         ],
       )),
     ]));

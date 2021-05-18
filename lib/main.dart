@@ -3,6 +3,7 @@ import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/login_screen.dart';
 import 'package:flutter_app/screens/registration_screen.dart';
 import 'package:flutter_app/screens/start_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,13 +12,16 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
-    );
+    return ScreenUtilInit(
+        designSize: Size(375, 812),
+        builder: () => MaterialApp(
+              title: 'Flutter Demo',
+              theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  buttonColor: Colors.green,
+                  textTheme: TextTheme(button: TextStyle(fontSize: 17.sp))),
+              home: SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
+            ));
   }
 }
 
@@ -35,17 +39,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       ElevatedButton(
-          onPressed: () => openNewScreen(RegistrationScreen()),
-          child: Text('Registration')),
-      ElevatedButton(
-          onPressed: () => openNewScreen(StartScreen()),
-          child: Text('Start screen')),
-      ElevatedButton(
-          onPressed: () => openNewScreen(LoginScreen()),
-          child: Text('Login Screen')),
-      ElevatedButton(
-          onPressed: () => openNewScreen(DetailedScreen()),
-          child: Text('Detailed'))
+          onPressed: () => openNewScreen(RegistrationScreen()), child: Text('Registration')),
+      ElevatedButton(onPressed: () => openNewScreen(StartScreen()), child: Text('Start screen')),
+      ElevatedButton(onPressed: () => openNewScreen(LoginScreen()), child: Text('Login Screen')),
+      ElevatedButton(onPressed: () => openNewScreen(DetailedScreen()), child: Text('Detailed'))
     ]);
   }
 

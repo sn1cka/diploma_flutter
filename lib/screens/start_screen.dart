@@ -12,16 +12,17 @@ class StartScreen extends StatelessWidget {
         body: Stack(children: [
       Image.asset(
         'img/splash.png',
-        fit: BoxFit.cover,
-        width: double.infinity,
+        fit: BoxFit.fill,
+        width: 1.sw,
+        height: 1.sh,
       ),
       Positioned(
           top: 300.h,
           left: 20,
           right: 20,
           child: Column(children: [
-            Text('Discover', style: TextStyle(fontSize: 72.sp, color: Colors.white)),
-            Text('Kyrgyzstan', style: TextStyle(fontSize: 72.sp, color: Colors.white))
+            Text('Discover', style: TextStyle(fontSize: 0.17.sw, color: Colors.white)),
+            Text('Kyrgyzstan', style: TextStyle(fontSize: 0.17.sw, color: Colors.white))
           ])),
       Center(
           child: Column(
@@ -33,11 +34,10 @@ class StartScreen extends StatelessWidget {
                   size: Size(1.sw, 50.w),
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
+                        Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => MainScreen(),
-                            ),
-                            (route) => false);
+                            ));
                       },
                       child: Text('Вход')))),
           Padding(

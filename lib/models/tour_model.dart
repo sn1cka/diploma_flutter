@@ -3,14 +3,25 @@ class Tour {
       'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg';
   String name = 'Водопад \'Слезы Барса\'';
   String region = 'Иссыкульская обл';
-  List<TourVariant> variants = [TourVariant()];
-  DetailedTour details = DetailedTour();
+  List<TourVariant> variants = [TourVariant(),TourVariant(),TourVariant(),TourVariant(),TourVariant(),TourVariant()];
+  List<String> additionalPhotosUrl = [
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+    'https://triptokyrgyzstan.com/sites/default/files/media/image/c_denis_frantosuzov.jpg',
+  ];
 }
 
 class TourVariant {
   String organization = 'Kettik.kg';
   int coast = 300;
   String date = '21.06.2020';
+  DetailedTour details = DetailedTour();
+
 }
 
 class DetailedTour {
@@ -19,7 +30,6 @@ class DetailedTour {
   String backTime = '20:00';
   String neededItems =
       'С собой необходимо иметь: дождевик, маску, антисептик, еду и воду с расчетом на один день';
-  List<String> additionalPhotosUrl = [];
 }
 
 class Contacts {

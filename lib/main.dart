@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
+import 'package:flutter_app/screens/images_screen.dart';
 import 'package:flutter_app/screens/login_screen.dart';
+import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_app/screens/registration_screen.dart';
 import 'package:flutter_app/screens/start_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
         builder: () => MaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
-                  primarySwatch: Colors.blue,
+                  primarySwatch: Colors.green,
                   buttonColor: Colors.green,
                   textTheme: TextTheme(button: TextStyle(fontSize: 17.sp))),
               home: SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
@@ -42,7 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () => openNewScreen(RegistrationScreen()), child: Text('Registration')),
       ElevatedButton(onPressed: () => openNewScreen(StartScreen()), child: Text('Start screen')),
       ElevatedButton(onPressed: () => openNewScreen(LoginScreen()), child: Text('Login Screen')),
-      ElevatedButton(onPressed: () => openNewScreen(DetailedScreen()), child: Text('Detailed'))
+      ElevatedButton(onPressed: () => openNewScreen(DetailedScreen()), child: Text('Detailed')),
+      ElevatedButton(onPressed: () => openNewScreen(MainScreen()), child: Text('MainScreen')),
+      ElevatedButton(
+          onPressed: () => openNewScreen(CarouselImageShower(items: getTestImages())),
+          child: Text('ImageShower'))
     ]);
   }
 
@@ -50,5 +56,13 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => widget,
     ));
+  }
+
+  List<String> getTestImages() {
+    return [
+      'https://steamuserimages-a.akamaihd.net/ugc/940586530515504757/CDDE77CB810474E1C07B945E40AE4713141AFD76/',
+      'https://i.pinimg.com/originals/a4/f8/f9/a4f8f91b31d2c63a015ed34ae8c13bbd.jpg',
+      'https://cdn.hovia.com/app/uploads/Green-Tropical-Plant-Wallpaper-Mural-Plain.jpg'
+    ];
   }
 }

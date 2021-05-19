@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -29,11 +30,7 @@ class _LoginFormsState extends State<LoginForms> {
     return SafeArea(
         child: SingleChildScrollView(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+      TransparentAppBar(),
       Padding(
           padding: EdgeInsets.all(16),
           child: Text(

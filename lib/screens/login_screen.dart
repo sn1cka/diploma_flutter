@@ -32,7 +32,7 @@ class _LoginFormsState extends State<LoginForms> {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       TransparentAppBar(),
       Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(16.w),
           child: Text(
             'Вход',
             style: TextStyle(

@@ -18,12 +18,13 @@ class StartScreen extends StatelessWidget {
       ),
       Positioned(
           top: 300.h,
-          left: 20,
-          right: 20,
-          child: Column(children: [
-            Text('Discover', style: TextStyle(fontSize: 0.17.sw, color: Colors.white)),
-            Text('Kyrgyzstan', style: TextStyle(fontSize: 0.17.sw, color: Colors.white))
-          ])),
+          left: 20.w,
+          right: 20.w,
+          child: FittedBox(
+              child: Column(children: [
+            Text('Discover', style: TextStyle(fontSize: 71.sp, color: Colors.white)),
+            Text('Kyrgyzstan', style: TextStyle(fontSize: 71.sp, color: Colors.white))
+          ]))),
       Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -34,10 +35,9 @@ class StartScreen extends StatelessWidget {
                   size: Size(1.sw, 50.w),
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => MainScreen(),
-                            ));
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MainScreen(),
+                        ));
                       },
                       child: Text('Вход')))),
           Padding(

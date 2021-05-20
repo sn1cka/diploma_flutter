@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/screens/book_tour_screen.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/images_screen.dart';
 import 'package:flutter_app/screens/login_screen.dart';
@@ -16,7 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(375, 812),
-        builder: () => MaterialApp(
+        builder: () =>
+            MaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
                   primarySwatch: Colors.green,
@@ -46,6 +49,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ElevatedButton(onPressed: () => openNewScreen(LoginScreen()), child: Text('Login Screen')),
       ElevatedButton(onPressed: () => openNewScreen(DetailedScreen()), child: Text('Detailed')),
       ElevatedButton(onPressed: () => openNewScreen(MainScreen()), child: Text('MainScreen')),
+      ElevatedButton(
+          onPressed: () => openNewScreen(BookTourScreen(TourVariant())), child: Text('BookTour')),
       ElevatedButton(
           onPressed: () => openNewScreen(CarouselImageShower(items: getTestImages())),
           child: Text('ImageShower'))

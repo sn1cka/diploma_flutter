@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_app/components/app_bar.dart';
+import 'package:flutter_app/components/image_with_progress.dart';
 import 'package:flutter_app/models/tour_model.dart';
 import 'package:flutter_app/screens/book_tour_screen.dart';
 import 'package:flutter_app/screens/images_screen.dart';
@@ -32,6 +33,8 @@ class _DetailedWidgetState extends State<DetailedWidget> {
   Tour model = Tour();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
+  var _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -52,68 +55,56 @@ class _DetailedWidgetState extends State<DetailedWidget> {
               child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CarouselImageShower(items: [model.photoUrl]),
+                      builder: (context) => CarouselImageShower(
+                        items: [model.photoUrl],
+                        tag: 'MainImage',
+                      ),
                     ));
                   },
                   child: Hero(
-                      tag: CarouselImageShower.imageTag,
+                      tag: 'MainImage',
                       child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child: Image.network(
-                            model.photoUrl,
-                            height: 250.h,
-                            width: 1.sw,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                  height: 250.h,
-                                  width: 1.sw,
-                                  child: Center(
-                                      child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                                  loadingProgress.expectedTotalBytes!
-                                              : null)));
-                            },
-                          ))))),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                              height: 250.h,
+                              width: 1.sw,
+                              child: ProgressiveNetworkImage(
+                                url: model.photoUrl,
+                                boxfit: BoxFit.cover,
+                              )))))),
           model.variants.isEmpty
               ? Text('В настоящее время туры по этому направлению недоступны')
               : createTourVariants(model.variants),
           model.additionalPhotosUrl.isEmpty
               ? Container()
               : Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: EdgeInsets.symmetric(vertical: 15.h),
                   child: CarouselSlider(
                       items: getListOfAdditionalImages(model.additionalPhotosUrl),
                       options: CarouselOptions(
-                          height: 220.h, viewportFraction: 0.6, enlargeCenterPage: true)))
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                          enableInfiniteScroll: false,
+                          height: 220.h,
+                          viewportFraction: 0.6,
+                          disableCenter: false,
+                          enlargeCenterPage: true))),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: model.additionalPhotosUrl.map((url) {
+                int index = model.additionalPhotosUrl.indexOf(url);
+                return Container(
+                    width: _currentIndex == index ? 10.w : 8.w,
+                    height: _currentIndex == index ? 10.w : 8.w,
+                    margin: EdgeInsets.symmetric(vertical: 10.w, horizontal: 2.w),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _currentIndex == index ? Colors.lightGreen : Colors.grey));
+              }).toList())
         ])));
-  }
-
-  List<Widget> getListOfAdditionalImages(List<String> list) {
-    return list
-        .map((elementUrl) => Padding(
-            padding: EdgeInsets.symmetric(vertical: 5),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  elementUrl,
-                  fit: BoxFit.contain,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return Center(
-                        child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null));
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return Center(child: Icon(Icons.error));
-                  },
-                ))))
-        .toList();
   }
 
   Widget createTourVariants(List<TourVariant> variants) {
@@ -142,5 +133,32 @@ class _DetailedWidgetState extends State<DetailedWidget> {
       columns: dataTitle,
       rows: rows,
     ));
+  }
+
+  List<Widget> getListOfAdditionalImages(List<String> itemList) {
+    return itemList.map((elementUrl) {
+      var index = itemList.indexOf(elementUrl);
+      return Padding(
+          padding: EdgeInsets.symmetric(vertical: 5.h),
+          child: InkWell(
+            child: Hero(
+                tag: 'MutlipleImages$index',
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: ProgressiveNetworkImage(
+                      url: elementUrl,
+                      boxfit: BoxFit.cover,
+                    ))),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => CarouselImageShower(
+                  tag: 'MutlipleImages$index',
+                  items: itemList,
+                  initialPage: index,
+                ),
+              ));
+            },
+          ));
+    }).toList();
   }
 }

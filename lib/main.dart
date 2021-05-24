@@ -3,6 +3,7 @@ import 'package:flutter_app/models/tour_model.dart';
 import 'package:flutter_app/screens/book_tour_screen.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/images_screen.dart';
+import 'package:flutter_app/screens/list_tour_screen.dart';
 import 'package:flutter_app/screens/login_screen.dart';
 import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_app/screens/registration_screen.dart';
@@ -18,8 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(375, 812),
-        builder: () =>
-            MaterialApp(
+        builder: () => MaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
                   primarySwatch: Colors.green,
@@ -47,13 +47,19 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () => openNewScreen(RegistrationScreen()), child: Text('Registration')),
       ElevatedButton(onPressed: () => openNewScreen(StartScreen()), child: Text('Start screen')),
       ElevatedButton(onPressed: () => openNewScreen(LoginScreen()), child: Text('Login Screen')),
-      ElevatedButton(onPressed: () => openNewScreen(DetailedScreen()), child: Text('Detailed')),
+      ElevatedButton(
+          onPressed: () => openNewScreen(DetailedScreen(tour: Tour())), child: Text('Detailed')),
       ElevatedButton(onPressed: () => openNewScreen(MainScreen()), child: Text('MainScreen')),
       ElevatedButton(
-          onPressed: () => openNewScreen(BookTourScreen(TourVariant())), child: Text('BookTour')),
+          onPressed: () => openNewScreen(BookTourScreen(Tour())), child: Text('BookTour')),
       ElevatedButton(
           onPressed: () => openNewScreen(CarouselImageShower(items: getTestImages())),
-          child: Text('ImageShower'))
+          child: Text('ImageShower')),
+      ElevatedButton(
+          onPressed: () => openNewScreen(TourListScreen(
+                tourList: [Tour(), Tour()],
+              )),
+          child: Text('TourList')),
     ]);
   }
 

@@ -12,31 +12,33 @@ import 'package:flutter_app/screens/images_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DetailedScreen extends StatelessWidget {
-  const DetailedScreen({Key? key}) : super(key: key);
+  const DetailedScreen({Key? key, required this.tour}) : super(key: key);
+  final Tour tour;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DetailedWidget(),
+      body: DetailedWidget(tour),
     );
   }
 }
 
 class DetailedWidget extends StatefulWidget {
-  const DetailedWidget({Key? key}) : super(key: key);
+  const DetailedWidget(this.tour, {Key? key}) : super(key: key);
+  final Tour tour;
 
   @override
   _DetailedWidgetState createState() => _DetailedWidgetState();
 }
 
 class _DetailedWidgetState extends State<DetailedWidget> {
-  Tour model = Tour();
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
   var _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    var model = widget.tour;
     return RefreshIndicator(
         onRefresh: () async {},
         child: SingleChildScrollView(
@@ -118,12 +120,12 @@ class _DetailedWidgetState extends State<DetailedWidget> {
     for (var variant in variants) {
       rows.add(DataRow(
         cells: [
-          DataCell(Text(variant.organization)),
+          DataCell(Text(variant.company.name)),
           DataCell(Center(child: Text(variant.coast.toString()))),
           DataCell(Text(variant.date))
         ],
         onSelectChanged: (value) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => BookTourScreen(variant)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => BookTourScreen(Tour())));
         },
       ));
     }

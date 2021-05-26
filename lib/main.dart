@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/screens/book_tour_screen.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/images_screen.dart';
@@ -9,6 +9,8 @@ import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_app/screens/registration_screen.dart';
 import 'package:flutter_app/screens/start_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'api/fake_data.dart';
 
 void main() {
   runApp(MyApp());
@@ -48,16 +50,16 @@ class _MyHomePageState extends State<MyHomePage> {
       ElevatedButton(onPressed: () => openNewScreen(StartScreen()), child: Text('Start screen')),
       ElevatedButton(onPressed: () => openNewScreen(LoginScreen()), child: Text('Login Screen')),
       ElevatedButton(
-          onPressed: () => openNewScreen(DetailedScreen(tour: Tour())), child: Text('Detailed')),
+          onPressed: () => openNewScreen(DetailedScreen(tour: FakeData.fakeTour)), child: Text('Detailed')),
       ElevatedButton(onPressed: () => openNewScreen(MainScreen()), child: Text('MainScreen')),
       ElevatedButton(
-          onPressed: () => openNewScreen(BookTourScreen(Tour())), child: Text('BookTour')),
+          onPressed: () => openNewScreen(BookTourScreen(FakeData.fakeTour)), child: Text('BookTour')),
       ElevatedButton(
           onPressed: () => openNewScreen(CarouselImageShower(items: getTestImages())),
           child: Text('ImageShower')),
       ElevatedButton(
           onPressed: () => openNewScreen(TourListScreen(
-                tourList: [Tour(), Tour()],
+                tourList: [FakeData.fakeTour,FakeData.fakeTour,FakeData.fakeTour,FakeData.fakeTour],
               )),
           child: Text('TourList')),
     ]);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/api/fake_data.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/main_screen_tours_widget.dart';
 import 'package:flutter_app/models/settings_model.dart';
-import 'package:flutter_app/models/tour_model.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/list_tour_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,13 +19,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   var settings = SettingsModel();
   var actual = [
-    Tour(),
-    Tour(),
-    Tour(),
-    Tour(),
-    Tour(),
+    FakeData.fakeTour,
+    FakeData.fakeTour,
+    FakeData.fakeTour,
+    FakeData.fakeTour,
+    FakeData.fakeTour,
+    FakeData.fakeTour,
+    FakeData.fakeTour,
+    FakeData.fakeTour,
+    FakeData.fakeTour,
   ];
-  var popularTour = Tour();
+  var popularTour = FakeData.fakeTour;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +55,6 @@ class _MainScreenState extends State<MainScreen> {
         hint: 'Поиск',
         body: Container(),
         automaticallyImplyBackButton: false,
-
       ),
       Padding(
           padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),

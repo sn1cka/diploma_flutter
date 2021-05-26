@@ -4,12 +4,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_app/api/fake_data.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/image_with_progress.dart';
-import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/screens/book_tour_screen.dart';
 import 'package:flutter_app/screens/images_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'main_screen.dart';
 
 class DetailedScreen extends StatelessWidget {
   const DetailedScreen({Key? key, required this.tour}) : super(key: key);
@@ -125,7 +128,7 @@ class _DetailedWidgetState extends State<DetailedWidget> {
           DataCell(Text(variant.date))
         ],
         onSelectChanged: (value) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => BookTourScreen(Tour())));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => BookTourScreen(FakeData.fakeTour)));
         },
       ));
     }

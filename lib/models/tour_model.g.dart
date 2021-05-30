@@ -8,24 +8,24 @@ part of 'tour_model.dart';
 
 Tour _$TourFromJson(Map<String, dynamic> json) {
   return Tour(
-    photoUrl: json['photoUrl'] as String,
-    name: json['name'] as String,
-    region: json['region'] as String,
     variants: (json['variants'] as List<dynamic>)
         .map((e) => TourVariant.fromJson(e as Map<String, dynamic>))
         .toList(),
-    additionalPhotosUrl: (json['additionalPhotosUrl'] as List<dynamic>)
-        .map((e) => e as String)
-        .toList(),
+    photo: json['photo'] as String,
+    id: json['id'] as int,
+    name: json['name'] as String,
+    region: json['region'] as String,
+    photos: (json['photos'] as List<dynamic>).map((e) => e as String).toList(),
   );
 }
 
 Map<String, dynamic> _$TourToJson(Tour instance) => <String, dynamic>{
-      'photoUrl': instance.photoUrl,
-      'region': instance.region,
+      'id': instance.id,
+      'photo': instance.photo,
       'name': instance.name,
+      'region': instance.region,
+      'photos': instance.photos,
       'variants': instance.variants,
-      'additionalPhotosUrl': instance.additionalPhotosUrl,
     };
 
 TourVariant _$TourVariantFromJson(Map<String, dynamic> json) {
@@ -48,16 +48,18 @@ Map<String, dynamic> _$TourVariantToJson(TourVariant instance) =>
 TourDetails _$TourDetailsFromJson(Map<String, dynamic> json) {
   return TourDetails(
     difficulty: json['difficulty'] as String,
-    outTime: json['outTime'] as String,
-    backTime: json['backTime'] as String,
-    neededItems: json['neededItems'] as String,
+    out_time: json['out_time'] as String,
+    back_time: json['back_time'] as String,
+    needed_items: json['needed_items'] as String,
+    id: json['id'] as int,
   );
 }
 
 Map<String, dynamic> _$TourDetailsToJson(TourDetails instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'difficulty': instance.difficulty,
-      'outTime': instance.outTime,
-      'backTime': instance.backTime,
-      'neededItems': instance.neededItems,
+      'out_time': instance.out_time,
+      'back_time': instance.back_time,
+      'needed_items': instance.needed_items,
     };

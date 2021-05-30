@@ -6,7 +6,7 @@ class TransparentAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  AppBar(
+    return AppBar(
       iconTheme: IconThemeData(color: Colors.black),
       backgroundColor: Colors.transparent,
       elevation: 0,

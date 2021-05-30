@@ -1,3 +1,3 @@
-class SettingsModel{
+class SettingsModel {
   String name = 'Антон';
 }

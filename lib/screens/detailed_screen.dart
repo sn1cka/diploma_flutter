@@ -4,15 +4,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter_app/api/fake_data.dart';
+import 'package:flutter_app/models/tour_model.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/image_with_progress.dart';
-import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/screens/book_tour_screen.dart';
 import 'package:flutter_app/screens/images_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'main_screen.dart';
 
 class DetailedScreen extends StatelessWidget {
   const DetailedScreen({Key? key, required this.tour}) : super(key: key);
@@ -20,8 +17,10 @@ class DetailedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: DetailedWidget(tour),
+    return SafeArea(
+      child: Scaffold(
+        body: DetailedWidget(tour),
+      ),
     );
   }
 }
@@ -43,9 +42,9 @@ class _DetailedWidgetState extends State<DetailedWidget> {
   Widget build(BuildContext context) {
     var model = widget.tour;
     return RefreshIndicator(
-        onRefresh: () async {},
-        child: SingleChildScrollView(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      onRefresh: () async {},
+      child: SingleChildScrollView(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           TransparentAppBar(),
           Padding(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
@@ -56,82 +55,110 @@ class _DetailedWidgetState extends State<DetailedWidget> {
                 ),
               )),
           Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.w),
-              child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CarouselImageShower(
-                        items: [model.photoUrl],
-                        tag: 'MainImage',
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.w),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => CarouselImageShower(
+                    items: [model.photo],
+                    tag: 'MainImage',
+                  ),
+                ));
+              },
+              child: Hero(
+                  tag: 'MainImage',
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      height: 250.h,
+                      width: 1.sw,
+                      child: ProgressiveNetworkImage(
+                        url: model.photo,
+                        boxfit: BoxFit.cover,
                       ),
-                    ));
-                  },
-                  child: Hero(
-                      tag: 'MainImage',
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Container(
-                              height: 250.h,
-                              width: 1.sw,
-                              child: ProgressiveNetworkImage(
-                                url: model.photoUrl,
-                                boxfit: BoxFit.cover,
-                              )))))),
+                    ),
+                  )),
+            ),
+          ),
           model.variants.isEmpty
               ? Text('В настоящее время туры по этому направлению недоступны')
               : createTourVariants(model.variants),
-          model.additionalPhotosUrl.isEmpty
+          model.photos.isEmpty
               ? Container()
               : Padding(
                   padding: EdgeInsets.symmetric(vertical: 15.h),
                   child: CarouselSlider(
-                      items: getListOfAdditionalImages(model.additionalPhotosUrl),
-                      options: CarouselOptions(
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          },
-                          enableInfiniteScroll: false,
-                          height: 220.h,
-                          viewportFraction: 0.6,
-                          disableCenter: false,
-                          enlargeCenterPage: true))),
+                    items: getListOfAdditionalImages(model.photos),
+                    options: CarouselOptions(
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                        enableInfiniteScroll: false,
+                        height: 220.h,
+                        viewportFraction: 0.6,
+                        disableCenter: false,
+                        enlargeCenterPage: true),
+                  ),
+                ),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: model.additionalPhotosUrl.map((url) {
-                int index = model.additionalPhotosUrl.indexOf(url);
+              children: model.photos.map((url) {
+                int index = model.photos.indexOf(url);
                 return Container(
                     width: _currentIndex == index ? 10.w : 8.w,
                     height: _currentIndex == index ? 10.w : 8.w,
-                    margin: EdgeInsets.symmetric(vertical: 10.w, horizontal: 2.w),
+                    margin:
+                        EdgeInsets.symmetric(vertical: 10.w, horizontal: 2.w),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _currentIndex == index ? Colors.lightGreen : Colors.grey));
+                        color: _currentIndex == index
+                            ? Colors.lightGreen
+                            : Colors.grey));
               }).toList())
-        ])));
+        ]),
+      ),
+    );
   }
 
   Widget createTourVariants(List<TourVariant> variants) {
     var dataTitle = [
       DataColumn(label: Text('Орагнизатор')),
       DataColumn(label: Text('Стоимость')),
-      DataColumn(label: Center(child: Text('Дата'))),
+      DataColumn(
+        label: Center(
+          child: Text('Дата'),
+        ),
+      ),
     ];
 
-    List<DataRow> rows = [];
-    for (var variant in variants) {
-      rows.add(DataRow(
-        cells: [
-          DataCell(Text(variant.company.name)),
-          DataCell(Center(child: Text(variant.coast.toString()))),
-          DataCell(Text(variant.date))
-        ],
-        onSelectChanged: (value) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => BookTourScreen(FakeData.fakeTour)));
-        },
-      ));
-    }
+    var rows = variants
+        .map(
+          (variant) => DataRow(
+            cells: [
+              DataCell(Text(variant.company.name)),
+              DataCell(Center(
+                child: Text(
+                  variant.coast.toString(),
+                ),
+              )),
+              DataCell(Text(variant.date))
+            ],
+            onSelectChanged: (value) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BookTourScreen(
+                    widget.tour,
+                    variant: variant,
+                  ),
+                ),
+              );
+            },
+          ),
+        )
+        .toList();
     return FittedBox(
         child: DataTable(
       showCheckboxColumn: false,
@@ -147,13 +174,15 @@ class _DetailedWidgetState extends State<DetailedWidget> {
           padding: EdgeInsets.symmetric(vertical: 5.h),
           child: InkWell(
             child: Hero(
-                tag: 'MutlipleImages$index',
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: ProgressiveNetworkImage(
-                      url: elementUrl,
-                      boxfit: BoxFit.cover,
-                    ))),
+              tag: 'MutlipleImages$index',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: ProgressiveNetworkImage(
+                  url: elementUrl,
+                  boxfit: BoxFit.cover,
+                ),
+              ),
+            ),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => CarouselImageShower(

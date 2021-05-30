@@ -8,48 +8,47 @@ part of 'company_model.dart';
 
 Company _$CompanyFromJson(Map<String, dynamic> json) {
   return Company(
+    id: json['id'] as int,
     name: json['name'] as String,
-    companyFeed: (json['companyFeed'] as List<dynamic>)
-        .map((e) => CompanyFeed.fromJson(e as Map<String, dynamic>))
-        .toList(),
     contacts:
         CompanyContacts.fromJson(json['contacts'] as Map<String, dynamic>),
   );
 }
 
 Map<String, dynamic> _$CompanyToJson(Company instance) => <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
-      'companyFeed': instance.companyFeed,
       'contacts': instance.contacts,
     };
 
 CompanyContacts _$CompanyContactsFromJson(Map<String, dynamic> json) {
   return CompanyContacts(
-    whatsApp: json['whatsApp'] as String?,
+    id: json['id'] as int,
+    whatsapp: json['whatsapp'] as String?,
     telegram: json['telegram'] as String?,
     instagram: json['instagram'] as String?,
-    telephone: json['telephone'] as String,
+    phone: json['phone'] as String,
   );
 }
 
 Map<String, dynamic> _$CompanyContactsToJson(CompanyContacts instance) =>
     <String, dynamic>{
-      'whatsApp': instance.whatsApp,
+      'id': instance.id,
+      'whatsapp': instance.whatsapp,
       'telegram': instance.telegram,
       'instagram': instance.instagram,
-      'telephone': instance.telephone,
+      'phone': instance.phone,
     };
 
-CompanyFeed _$CompanyFeedFromJson(Map<String, dynamic> json) {
-  return CompanyFeed(
+TourFeed _$TourFeedFromJson(Map<String, dynamic> json) {
+  return TourFeed(
     name: json['name'] as String,
     photo: json['photo'] as String,
     feed: json['feed'] as String,
   );
 }
 
-Map<String, dynamic> _$CompanyFeedToJson(CompanyFeed instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TourFeedToJson(TourFeed instance) => <String, dynamic>{
       'name': instance.name,
       'photo': instance.photo,
       'feed': instance.feed,

@@ -65,9 +65,9 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     // return FloatingSearchBar(
-//     //     body: SearchResultsListView(
-//     //     searchTerm: selectedTerm,
+//     return FloatingSearchBar(
+//         body: SearchResultsListView(
+//         searchTerm: selectedTerm,
 //     )
 //   }
 // }

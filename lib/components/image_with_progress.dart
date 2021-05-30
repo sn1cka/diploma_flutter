@@ -7,7 +7,8 @@ class ProgressiveNetworkImage extends StatelessWidget {
 
   final BoxFit? boxfit;
 
-  const ProgressiveNetworkImage({Key? key, required this.url, this.boxfit}) : super(key: key);
+  const ProgressiveNetworkImage({Key? key, required this.url, this.boxfit})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,10 @@ class ProgressiveNetworkImage extends StatelessWidget {
         imageUrl: url,
         fit: boxfit,
         progressIndicatorBuilder: (context, child, loadingProgress) {
-          return Center(child:loadingProgress.progress != null? CircularProgressIndicator(value: loadingProgress.progress): Container());
+          return Center(
+              child: loadingProgress.progress != null
+                  ? CircularProgressIndicator(value: loadingProgress.progress)
+                  : Container());
         },
         errorWidget: (context, error, stackTrace) {
           return Center(child: Icon(Icons.error));

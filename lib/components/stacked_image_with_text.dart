@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/api/tour_model.dart';
+import 'package:flutter_app/models/tour_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'image_with_progress.dart';
@@ -18,7 +18,7 @@ class StackedImageWithText extends StatelessWidget {
             height: 270.h,
             width: 1.sw - 32.w,
             child: ProgressiveNetworkImage(
-              url: element.photoUrl,
+              url: element.photo,
               boxfit: BoxFit.cover,
             )),
         Positioned(

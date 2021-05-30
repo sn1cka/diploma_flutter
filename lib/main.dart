@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/screens/book_tour_screen.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/images_screen.dart';
@@ -24,10 +23,14 @@ class MyApp extends StatelessWidget {
         builder: () => MaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
-                  primarySwatch: Colors.green,
-                  buttonColor: Colors.green,
-                  textTheme: TextTheme(button: TextStyle(fontSize: 17.sp))),
-              home: SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
+                primarySwatch: Colors.green,
+                buttonColor: Colors.green,
+                textTheme: TextTheme(
+                  button: TextStyle(fontSize: 17.sp),
+                ),
+              ),
+              home:
+                  SafeArea(child: MyHomePage(title: 'Flutter Demo Home Page')),
             ));
   }
 }
@@ -46,21 +49,45 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       ElevatedButton(
-          onPressed: () => openNewScreen(RegistrationScreen()), child: Text('Registration')),
-      ElevatedButton(onPressed: () => openNewScreen(StartScreen()), child: Text('Start screen')),
-      ElevatedButton(onPressed: () => openNewScreen(LoginScreen()), child: Text('Login Screen')),
+        onPressed: () => openNewScreen(RegistrationScreen()),
+        child: Text('Registration'),
+      ),
       ElevatedButton(
-          onPressed: () => openNewScreen(DetailedScreen(tour: FakeData.fakeTour)), child: Text('Detailed')),
-      ElevatedButton(onPressed: () => openNewScreen(MainScreen()), child: Text('MainScreen')),
+        onPressed: () => openNewScreen(StartScreen()),
+        child: Text('Start screen'),
+      ),
       ElevatedButton(
-          onPressed: () => openNewScreen(BookTourScreen(FakeData.fakeTour)), child: Text('BookTour')),
+        onPressed: () => openNewScreen(LoginScreen()),
+        child: Text('Login Screen'),
+      ),
       ElevatedButton(
-          onPressed: () => openNewScreen(CarouselImageShower(items: getTestImages())),
+          onPressed: () => openNewScreen(DetailedScreen(
+                tour: FakeData.tour,
+              )),
+          child: Text('Detailed')),
+      ElevatedButton(
+        onPressed: () => openNewScreen(MainScreen()),
+        child: Text('MainScreen'),
+      ),
+      ElevatedButton(
+          onPressed: () => openNewScreen(BookTourScreen(
+                FakeData.tour,
+                variant: FakeData.variant,
+              )),
+          child: Text('BookTour')),
+      ElevatedButton(
+          onPressed: () => openNewScreen(
+                CarouselImageShower(
+                  items: getTestImages(),
+                ),
+              ),
           child: Text('ImageShower')),
       ElevatedButton(
-          onPressed: () => openNewScreen(TourListScreen(
-                tourList: [FakeData.fakeTour,FakeData.fakeTour,FakeData.fakeTour,FakeData.fakeTour],
-              )),
+          onPressed: () => openNewScreen(
+                TourListScreen(
+                  tourList: FakeData.tourList,
+                ),
+              ),
           child: Text('TourList')),
     ]);
   }

@@ -1,44 +1,52 @@
-import 'package:retrofit/retrofit.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'company_model.g.dart';
 
 @JsonSerializable()
 class Company {
+  int id;
   String name;
-  List<CompanyFeed> companyFeed;
   CompanyContacts contacts;
 
-  Company({required this.name, required this.companyFeed, required this.contacts});
+  Company({required this.id, required this.name, required this.contacts});
 
-  factory Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
+  factory Company.fromJson(Map<String, dynamic> json) =>
+      _$CompanyFromJson(json);
+
   Map<String, dynamic> toJson() => _$CompanyToJson(this);
-
 }
-
 
 @JsonSerializable()
 class CompanyContacts {
-  String? whatsApp;
+  int id;
+  String? whatsapp;
   String? telegram;
   String? instagram;
-  String telephone;
+  String phone;
 
-  CompanyContacts({this.whatsApp, this.telegram, this.instagram, required this.telephone});
+  CompanyContacts(
+      {required this.id,
+      this.whatsapp,
+      this.telegram,
+      this.instagram,
+      required this.phone});
 
-  factory CompanyContacts.fromJson(Map<String, dynamic> json) => _$CompanyContactsFromJson(json);
+  factory CompanyContacts.fromJson(Map<String, dynamic> json) =>
+      _$CompanyContactsFromJson(json);
+
   Map<String, dynamic> toJson() => _$CompanyContactsToJson(this);
 }
 
 @JsonSerializable()
-class CompanyFeed {
+class TourFeed {
   String name;
   String photo;
   String feed;
 
-  CompanyFeed({required this.name, required this.photo, required this.feed});
+  TourFeed({required this.name, required this.photo, required this.feed});
 
-  factory CompanyFeed.fromJson(Map<String, dynamic> json) => _$CompanyFeedFromJson(json);
-  Map<String, dynamic> toJson() => _$CompanyFeedToJson(this);
+  factory TourFeed.fromJson(Map<String, dynamic> json) =>
+      _$TourFeedFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TourFeedToJson(this);
 }
-

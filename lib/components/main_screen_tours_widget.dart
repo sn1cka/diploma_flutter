@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/components/stacked_image_with_text.dart';
 
 class MainScreenTourWidget extends StatelessWidget {

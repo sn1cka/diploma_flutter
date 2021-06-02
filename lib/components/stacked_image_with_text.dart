@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'image_with_progress.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 
 import 'company_model.dart';
 

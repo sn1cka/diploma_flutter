@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/stacked_image_with_text.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';

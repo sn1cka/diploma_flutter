@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/components/app_bar.dart';
+import 'package:flutter_app/main.dart';
+import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -76,8 +80,15 @@ class _LoginFormsState extends State<LoginForms> {
                       child: SizedBox.fromSize(
                         size: Size(1.sw, 50.w),
                         child: ElevatedButton(
-                          onPressed: () {
-                            _formKey.currentState!.validate();
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate() &&
+                                password == 'test1234.') {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Выполняется вход')));
+                              await Future.delayed(Duration(seconds: 1));
+                              Hive.box('MyBox').put('isAuthorized', true);
+                              openNewScreen(MainScreen(), context);
+                            }
                           },
                           child: Text(
                             'Далее',
@@ -104,11 +115,10 @@ class _LoginFormsState extends State<LoginForms> {
     );
   }
 
-  Widget createForm(
-      {required String labelText,
-      required Function(String) onChanged,
-      required String? Function(String?) validator,
-      TextInputType type = TextInputType.text}) {
+  Widget createForm({required String labelText,
+    required Function(String) onChanged,
+    required String? Function(String?) validator,
+    TextInputType type = TextInputType.text}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
       child: TextFormField(

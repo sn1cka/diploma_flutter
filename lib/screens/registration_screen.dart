@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_app/components/app_bar.dart';
+import 'package:flutter_app/main.dart';
+import 'package:flutter_app/screens/validate_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegistrationScreen extends StatelessWidget {
@@ -31,6 +33,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
   var password = '';
   var repeatPassword = '';
   var getEmails = false;
+  var isValidated = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -38,110 +41,122 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          TransparentAppBar(),
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
-              child: Text(
-                'Регистрация',
-                style: TextStyle(
-                  fontSize: 34.sp,
+        child: isValidated
+            ? Expanded(
+              child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-              )),
-          Form(
-              key: _formKey,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    createForm(
-                        labelText: 'Имя*',
-                        onChanged: (value) {
-                          name = value;
-                        },
-                        validator: (value) {
-                          if (name.isEmpty) return 'Введите имя';
-                        },
-                        type: TextInputType.name),
-                    createForm(
-                        labelText: 'Email*',
-                        onChanged: (value) {
-                          email = value;
-                        },
-                        validator: (value) {
-                          if (email.isEmpty) return 'Введите почту';
-                          if (!email.contains('@')) {
-                            return 'Введите существующий адрес';
-                          }
-                        },
-                        type: TextInputType.emailAddress),
-                    createForm(
-                        labelText: 'Пароль*',
-                        onChanged: (value) {
-                          password = value;
-                        },
-                        validator: (value) {
-                          if (password.isEmpty) return 'Введите пароль';
-                          if (password.length < 6) {
-                            return 'Длина пароля должна быть не менее 6 символов';
-                          }
-                        },
-                        type: TextInputType.visiblePassword),
-                    createForm(
-                        labelText: 'Повторите пароль*',
-                        onChanged: (value) {
-                          repeatPassword = value;
-                        },
-                        validator: (value) {
-                          if (repeatPassword.isEmpty) {
-                            return 'Введите пароль';
-                          }
-                          if (password != repeatPassword) {
-                            return 'Пароли не совпадают';
-                          }
-                        }),
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(8.w, 8.h, 0, 40.h),
-                        child: CheckboxListTile(
-                          contentPadding: EdgeInsets.zero,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text('Я хочу получать Email рассылку'),
-                          onChanged: (bool? value) {
-                            setState(() {
-                              getEmails = value!;
-                            });
-                          },
-                          value: getEmails,
-                        )),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 16.h, horizontal: 16.w),
-                      child: SizedBox.fromSize(
-                        size: Size(1.sw, 50.h),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _formKey.currentState!.validate();
-                          },
-                          child: Text(
-                            'Далее',
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
+            )
+            : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                TransparentAppBar(),
+                Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
+                    child: Text(
+                      'Регистрация',
+                      style: TextStyle(
+                        fontSize: 34.sp,
                       ),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 16.h, horizontal: 16.w),
-                        child: SizedBox.fromSize(
-                          size: Size(1.sw, 50.h),
-                          child: (ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Отмена'),
-                          )),
-                        ))
-                  ])),
-        ]),
+                    )),
+                Form(
+                    key: _formKey,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          createForm(
+                              labelText: 'Имя*',
+                              onChanged: (value) {
+                                name = value;
+                              },
+                              validator: (value) {
+                                if (name.isEmpty) return 'Введите имя';
+                              },
+                              type: TextInputType.name),
+                          createForm(
+                              labelText: 'Email*',
+                              onChanged: (value) {
+                                email = value;
+                              },
+                              validator: (value) {
+                                if (email.isEmpty) return 'Введите почту';
+                                if (!email.contains('@')) {
+                                  return 'Введите существующий адрес';
+                                }
+                              },
+                              type: TextInputType.emailAddress),
+                          createForm(
+                              labelText: 'Пароль*',
+                              onChanged: (value) {
+                                password = value;
+                              },
+                              validator: (value) {
+                                if (password.isEmpty) return 'Введите пароль';
+                                if (password.length < 6) {
+                                  return 'Длина пароля должна быть не менее 6 символов';
+                                }
+                              },
+                              type: TextInputType.visiblePassword),
+                          createForm(
+                              labelText: 'Повторите пароль*',
+                              onChanged: (value) {
+                                repeatPassword = value;
+                              },
+                              validator: (value) {
+                                if (repeatPassword.isEmpty) {
+                                  return 'Введите пароль';
+                                }
+                                if (password != repeatPassword) {
+                                  return 'Пароли не совпадают';
+                                }
+                              }),
+                          // Padding(
+                          //     padding: EdgeInsets.fromLTRB(8.w, 8.h, 0, 40.h),
+                          //     child: CheckboxListTile(
+                          //       contentPadding: EdgeInsets.zero,
+                          //       controlAffinity: ListTileControlAffinity.leading,
+                          //       title: Text('Я хочу получать Email рассылку'),
+                          //       onChanged: (bool? value) {
+                          //         setState(() {
+                          //           getEmails = value!;
+                          //         });
+                          //       },
+                          //       value: getEmails,
+                          //     )),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16.h, horizontal: 16.w),
+                            child: SizedBox.fromSize(
+                              size: Size(1.sw, 50.h),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    setState(() {
+                                      isValidated = true;
+                                      toConfirmPage();
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  'Далее',
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16.h, horizontal: 16.w),
+                              child: SizedBox.fromSize(
+                                size: Size(1.sw, 50.h),
+                                child: (ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Отмена'),
+                                )),
+                              ))
+                        ])),
+              ]),
       ),
     );
   }
@@ -165,5 +180,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
           keyboardType: type,
           validator: validator,
         ));
+  }
+
+  void toConfirmPage() async {
+    await Future.delayed(Duration(milliseconds: 1500));
+    openNewScreen(ValidateScreen(), context);
+    setState(() {
+      isValidated = false;
+    });
   }
 }

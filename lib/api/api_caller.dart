@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_app/api/company_model.dart';
-import 'package:flutter_app/models/tour_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 import 'package:retrofit/http.dart';
 
 part 'api_caller.g.dart';
@@ -14,7 +14,5 @@ abstract class RestClient {
 
   @GET('api/tours/{id}/feeds/')
   Future<List<TourFeed>> getFeedsByTour(@Path() int id);
-  //
-  // @POST('api/users/')
-  // Future<>
+
 }

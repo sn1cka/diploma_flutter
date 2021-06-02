@@ -1,16 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/models/api_caller.dart';
-import 'package:flutter_app/models/tour_model.dart';
-import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/main_screen_tours_widget.dart';
-import 'package:flutter_app/models/settings_model.dart';
+import 'package:flutter_app/components/search_tile.dart';
+import 'package:flutter_app/api/api_caller.dart';
+import 'package:flutter_app/local_models/settings_model.dart';
+import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_app/screens/list_tour_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:logger/logger.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -26,6 +26,8 @@ class _MainScreenState extends State<MainScreen> {
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   var apiClient = RestClient(Dio());
   var logger = Logger();
+  var searchList = <Tour>[];
+  var textContoller = TextEditingController();
 
   Future<void> getTours() async {
     apiClient.getAllTours().then((value) {
@@ -44,6 +46,13 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getTours();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -59,7 +68,7 @@ class _MainScreenState extends State<MainScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
-                TransparentAppBar(),
+                // TransparentAppBar(),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 4.h),
                     child: Text(
@@ -74,10 +83,38 @@ class _MainScreenState extends State<MainScreen> {
                       'Куда хочешь поехать?',
                       style: TextStyle(fontSize: 15.sp),
                     )),
-                FloatingSearchAppBar(
-                  hint: 'Поиск',
-                  body: Container(),
-                  automaticallyImplyBackButton: false,
+                Padding(
+                  padding: EdgeInsets.all(16.w),
+                  child: CupertinoSearchTextField(
+                      controller: textContoller,
+                      onChanged: (value) {
+                        setState(() {
+                          searchList = actual
+                              .where((e) => (value.isNotEmpty &&
+                                  value.length > 2 &&
+                                  (e.name
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()) ||
+                                      e.region
+                                          .toLowerCase()
+                                          .contains(value.toLowerCase()))))
+                              .toList();
+                        });
+                      }),
+                ),
+                Column(
+                  children: searchList
+                      .map(
+                        (e) => InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return DetailedScreen(tour: e);
+                              }));
+                            },
+                            child: SearchTile(e)),
+                      )
+                      .toList(),
                 ),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),

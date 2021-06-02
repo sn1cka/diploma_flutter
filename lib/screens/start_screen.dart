@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/screens/main_screen.dart';
+import 'package:flutter_app/main.dart';
+import 'package:flutter_app/screens/login_screen.dart';
 import 'package:flutter_app/screens/registration_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -43,9 +44,7 @@ class StartScreen extends StatelessWidget {
                         size: Size(1.sw, 50.w),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => MainScreen(),
-                            ));
+                            openNewScreen(LoginScreen(), context);
                           },
                           child: Text('Вход'),
                         ),

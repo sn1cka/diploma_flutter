@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app/api/fake_data.dart';
+import 'package:flutter_app/api/tour_feed.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/image_with_progress.dart';
 import 'package:flutter_app/api/tour_model.dart';

@@ -22,7 +22,7 @@ class BookTourScreen extends StatefulWidget {
 }
 
 class _BookTourScreenState extends State<BookTourScreen> {
-  var feeds = [FakeData.feed];
+  var feeds = [SomeData.feed];
 
   @override
   Widget build(BuildContext context) {

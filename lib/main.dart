@@ -6,6 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
+  //todo add own cabinet and auth
   await Hive.initFlutter();
   await Hive.openBox('MyBox');
   runApp(MyApp());
@@ -13,7 +14,7 @@ void main() async {
 
 void openNewScreen(Widget widget, context, {bool needReplace = false}) {
   if (needReplace) {
-    Navigator.of(context).push(MaterialPageRoute(
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
       builder: (context) => widget,
     ));
   } else
@@ -71,63 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
     await Future.delayed(Duration(milliseconds: 500));
     var box = Hive.box('MyBox');
     if (await box.get('isAuthorized', defaultValue: false)) {
-      openNewScreen(MainScreen(), context, needReplace: false);
+      openNewScreen(MainScreen(), context, needReplace: true);
     } else
       openNewScreen(StartScreen(), context, needReplace: true);
   }
 
-//
-// List<String> getTestImages() {
-//   return [
-//     'https://steamuserimages-a.akamaihd.net/ugc/940586530515504757/CDDE77CB810474E1C07B945E40AE4713141AFD76/',
-//     'https://i.pinimg.com/originals/a4/f8/f9/a4f8f91b31d2c63a015ed34ae8c13bbd.jpg',
-//     'https://cdn.hovia.com/app/uploads/Green-Tropical-Plant-Wallpaper-Mural-Plain.jpg'
-//   ];
-// }
-//
-// void createTestButtons() {
-//   Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-//     ElevatedButton(
-//       onPressed: () => openNewScreen(RegistrationScreen()),
-//       child: Text('Registration'),
-//     ),
-//     ElevatedButton(
-//       onPressed: () => openNewScreen(StartScreen()),
-//       child: Text('Start screen'),
-//     ),
-//     ElevatedButton(
-//       onPressed: () => openNewScreen(LoginScreen()),
-//       child: Text('Login Screen'),
-//     ),
-//     ElevatedButton(
-//         onPressed: () => openNewScreen(DetailedScreen(
-//               tour: FakeData.tour,
-//             )),
-//         child: Text('Detailed')),
-//     ElevatedButton(
-//       onPressed: () => openNewScreen(MainScreen()),
-//       child: Text('MainScreen'),
-//     ),
-//     ElevatedButton(
-//         onPressed: () => openNewScreen(BookTourScreen(
-//               FakeData.tour,
-//               variant: FakeData.variant,
-//             )),
-//         child: Text('BookTour')),
-//     ElevatedButton(
-//         onPressed: () => openNewScreen(
-//               CarouselImageShower(
-//                 items: getTestImages(),
-//               ),
-//             ),
-//         child: Text('ImageShower')),
-//     ElevatedButton(
-//         onPressed: () => openNewScreen(
-//               TourListScreen(
-//                 tourList: FakeData.tourList,
-//               ),
-//             ),
-//         child: Text('TourList')),
-//   ]);
-// }
 }

@@ -25,16 +25,62 @@ class Tour {
   Map<String, dynamic> toJson() => _$TourToJson(this);
 }
 
+enum Difficulty { EASY, MIDDLE, HIGH, ADVANCED }
+
+String difficultyToStiring(Difficulty difficultyEnum) {
+  switch (difficultyEnum) {
+    case Difficulty.EASY:
+      return 'Легкий';
+    case Difficulty.MIDDLE:
+      return 'Средний';
+    case Difficulty.HIGH:
+      return 'Тяжелый';
+    case Difficulty.ADVANCED:
+      return 'Профессиональный';
+  }
+}
+
 @JsonSerializable()
 class TourVariant {
+  int id;
+  @JsonKey(name: 'tour')
+  int? tourId;
   Company company;
   int coast;
+
   String date;
-  TourDetails details;
+  Difficulty difficulty;
+  @JsonKey(name: 'out_time')
+  String outTime;
+  @JsonKey(name: 'back_time')
+  String backTime;
+  bool photographer;
+  @JsonKey(name: 'start_height')
+  int startHeight;
+  @JsonKey(name: 'max_height')
+  int maxHeight;
+  @JsonKey(name: 'days_count')
+  int daysCount;
+  @JsonKey(name: 'path_length_m')
+  int pathLength;
+  List<TourDetails> details;
+  @JsonKey(name: 'needed_items')
+  String neededItems;
 
   TourVariant(
-      {required this.company,
+      {this.tourId,
+      required this.startHeight,
+      required this.maxHeight,
+      required this.pathLength,
+      required this.daysCount,
+      required this.photographer,
+      required this.id,
+      required this.difficulty,
+      required this.backTime,
+      required this.outTime,
+      required this.company,
       required this.coast,
+      required this.neededItems,
       required this.date,
       required this.details});
 
@@ -46,24 +92,10 @@ class TourVariant {
 
 @JsonSerializable()
 class TourDetails {
-  int id;
-  String difficulty;
+  String title;
+  String description;
 
-  // ignore: non_constant_identifier_names
-  String out_time;
-
-  // ignore: non_constant_identifier_names
-  String back_time;
-
-  // ignore: non_constant_identifier_names
-  String needed_items;
-
-  TourDetails(
-      {required this.difficulty,
-      required this.out_time,
-      required this.back_time,
-      required this.needed_items,
-      required this.id});
+  TourDetails({required this.title, required this.description});
 
   factory TourDetails.fromJson(Map<String, dynamic> json) =>
       _$TourDetailsFromJson(json);

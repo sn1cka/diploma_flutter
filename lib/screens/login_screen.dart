@@ -3,7 +3,6 @@ import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -87,7 +86,7 @@ class _LoginFormsState extends State<LoginForms> {
                                   SnackBar(content: Text('Выполняется вход')));
                               await Future.delayed(Duration(seconds: 1));
                               Hive.box('MyBox').put('isAuthorized', true);
-                              openNewScreen(MainScreen(), context);
+                              openNewScreen(MainScreen(), context,needReplace: true);
                             }
                           },
                           child: Text(

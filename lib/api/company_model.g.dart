@@ -40,15 +40,20 @@ Map<String, dynamic> _$CompanyContactsToJson(CompanyContacts instance) =>
       'phone': instance.phone,
     };
 
-TourFeed _$TourFeedFromJson(Map<String, dynamic> json) {
-  return TourFeed(
+CompanyFeed _$CompanyFeedFromJson(Map<String, dynamic> json) {
+  return CompanyFeed(
+    companyId: json['company'] as int?,
+    id: json['id'] as int,
     name: json['name'] as String,
     photo: json['photo'] as String,
     feed: json['feed'] as String,
   );
 }
 
-Map<String, dynamic> _$TourFeedToJson(TourFeed instance) => <String, dynamic>{
+Map<String, dynamic> _$CompanyFeedToJson(CompanyFeed instance) =>
+    <String, dynamic>{
+      'company': instance.companyId,
+      'id': instance.id,
       'name': instance.name,
       'photo': instance.photo,
       'feed': instance.feed,

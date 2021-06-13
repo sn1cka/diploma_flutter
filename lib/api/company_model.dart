@@ -38,15 +38,23 @@ class CompanyContacts {
 }
 
 @JsonSerializable()
-class TourFeed {
+class CompanyFeed {
+  @JsonKey(name: 'company')
+  int? companyId;
+  int id;
   String name;
   String photo;
   String feed;
 
-  TourFeed({required this.name, required this.photo, required this.feed});
+  CompanyFeed(
+      {this.companyId,
+      required this.id,
+      required this.name,
+      required this.photo,
+      required this.feed});
 
-  factory TourFeed.fromJson(Map<String, dynamic> json) =>
-      _$TourFeedFromJson(json);
+  factory CompanyFeed.fromJson(Map<String, dynamic> json) =>
+      _$CompanyFeedFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TourFeedToJson(this);
+  Map<String, dynamic> toJson() => _$CompanyFeedToJson(this);
 }

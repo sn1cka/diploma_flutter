@@ -26,13 +26,16 @@ class SearchTile extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(tour.name),
-                Text(tour.region),
-              ],
+            child: Container(
+              width: (2/3).sw,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(tour.name),
+                  Text(tour.region),
+                ],
+              ),
             ),
           )
         ]),

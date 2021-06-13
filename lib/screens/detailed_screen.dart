@@ -81,7 +81,13 @@ class _DetailedWidgetState extends State<DetailedWidget> {
             ),
           ),
           model.variants.isEmpty
-              ? Text('В настоящее время туры по этому направлению недоступны')
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'К сожалению мы не смогли найти тур, удовлетворяющий ваш запрос',
+                    textAlign: TextAlign.center,
+                  ),
+                )
               : createTourVariants(model.variants),
           model.photos.isEmpty
               ? Container()

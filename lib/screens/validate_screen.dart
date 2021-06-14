@@ -20,35 +20,44 @@ class _ValidateScreenState extends State<ValidateScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TransparentAppBar(),
-            TextField(
-              controller: widget.controller,
-              maxLength: 4,
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-                child: SizedBox.fromSize(
-                  size: Size(1.sw, 50.h),
-                  child: (ElevatedButton(
-                    onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 1500));
-                      if (widget.controller.text == '5676') {
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          TransparentAppBar(),
+          Align(
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
+                    child: Text(
+                      'Проверьте свою почту и активируйте учетную запись',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 34.sp,
+                      ),
+                    )),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                  child: SizedBox.fromSize(
+                    size: Size(1.sw, 50.h),
+                    child: ElevatedButton(
+                      onPressed: () {
                         openNewScreen(LoginScreen(), context, needReplace: true);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Неверно введен код')));
-                      }
-                    },
-                    child: Text('Подтвердить'),
-                  )),
-                ))
-          ],
-        ),
+                      },
+                      child: Text('Войти'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
     ));
   }

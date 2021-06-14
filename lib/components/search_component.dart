@@ -9,8 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TourSearchComponent extends StatefulWidget {
   // TODO add onwillpop and flags
   //todo add datepicker
-  const TourSearchComponent({Key? key, required this.tourList})
-      : super(key: key);
+  const TourSearchComponent({Key? key, required this.tourList}) : super(key: key);
 
   final List<Tour> tourList;
 
@@ -51,94 +50,40 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
   }
 
   checkConditions() {
-    var tourList = <Tour>[];
-    tourList.addAll(widget.tourList);
+    List<Tour> tourList = List.from(widget.tourList);
     var text = searchTextController.text;
     if (text.isNotEmpty && text.length > 2) {
-      tourList = tourList.where((e) =>
-          (e.name.toLowerCase().contains(text.toLowerCase()) ||
-              e.region.toLowerCase().contains(text.toLowerCase()))).toList();
+      tourList = tourList
+          .where((e) => (e.name.toLowerCase().contains(text.toLowerCase()) ||
+              e.region.toLowerCase().contains(text.toLowerCase())))
+          .toList();
     }
     if (needPhotographer) {
       List<Tour> newList = [];
-      tourList.forEach((element) {
-        var newElement = element;
-        newElement.variants = newElement.variants
-            .where((element) => element.photographer)
-            .toList();
-        if (newElement.variants.isNotEmpty) {
-          newList.add(newElement);
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants.where((element) => element.photographer).toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
         }
       });
       tourList = newList;
     }
     if (coastMin != null) {
+
       List<Tour> newList = [];
-      tourList.forEach((element) {
-        Tour newElement = element;
-        newElement.variants = newElement.variants
-            .where((element) => element.coast >= coastMin!)
-            .toList();
-        if (newElement.variants.isNotEmpty) {
-          newList.add(newElement);
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants.where((element) => element.coast >= coastMin!).toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
         }
       });
       tourList = newList;
     }
-    if (coastMax != null) {
-      List<Tour> newList = [];
-      tourList.forEach((element) {
-        var newElement = element;
-        newElement.variants = newElement.variants
-            .where((element) => element.coast <= coastMax!)
-            .toList();
-        if (newElement.variants.isNotEmpty) {
-          newList.add(newElement);
-        }
-        tourList = newList;
-      });
-    }
-    if (daysCount != null) {
-      List<Tour> newList = [];
-      tourList.forEach((element) {
-        var newElement = element;
-        newElement.variants = newElement.variants
-            .where((element) => element.daysCount == daysCount!)
-            .toList();
-        if (newElement.variants.isNotEmpty) {
-          newList.add(newElement);
-        }
-        tourList = newList;
-      });
-    }
-    if (maxPathLength != null) {
-      List<Tour> newList = [];
-      tourList.forEach((element) {
-        var newElement = element;
-        newElement.variants = newElement.variants
-            .where((element) => element.pathLength == maxPathLength!)
-            .toList();
-        if (newElement.variants.isNotEmpty) {
-          newList.add(newElement);
-        }
-        tourList = newList;
-      });
-    }
-    if (daysCount != null) {
-      List<Tour> newList = [];
-      tourList.forEach((element) {
-        var newElement = Tour.fromJson(element.toJson());
-        newElement.variants = newElement.variants
-            .where((element) => element.daysCount == daysCount!)
-            .toList();
-        if (newElement.variants.isNotEmpty) {
-          newList.add(newElement);
-        }
-        tourList = newList;
-      });
-    }
+
     setState(() {
-      searchList = tourList;
+      searchList = List.from(tourList);
     });
   }
 
@@ -173,12 +118,39 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
                       checkConditions();
                     },
                   ),
-                  TextField(
-                    controller: coastMinTextController,
-                    onChanged: (value) {
-                      coastMin = int.tryParse(value);
-                      checkConditions();
-                    },
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Цена: '),
+                      Container(
+                        width: 100.w,
+                        child: TextField(
+                          controller: coastMinTextController,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(hintText: 'мин.', alignLabelWithHint: true),
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            coastMin = int.tryParse(value);
+                            checkConditions();
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40.w,
+                      ),
+                      Container(
+                        width: 100.w,
+                        child: TextField(
+                          controller: coastMaxTextController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {
+                            coastMax = int.tryParse(value);
+                            checkConditions();
+                          },
+                        ),
+                      ),
+                    ],
                   )
                 ]
               : [],
@@ -192,8 +164,7 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(
-                          'Всего найдено туров по запросу: ${searchList.length} '),
+                      Text('Всего найдено туров по запросу: ${searchList.length} '),
                       Align(
                         alignment: AlignmentDirectional.centerEnd,
                         child: TextButton(
@@ -207,8 +178,7 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
                     .map(
                       (e) => InkWell(
                           onTap: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (context) {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                               return DetailedScreen(tour: e);
                             }));
                           },

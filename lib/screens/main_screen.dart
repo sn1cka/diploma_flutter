@@ -80,36 +80,31 @@ class _MainScreenState extends State<MainScreen> {
                       'Куда хочешь поехать?',
                       style: TextStyle(fontSize: 15.sp),
                     )),
-                TourSearchComponent(tourList: actual),
+                TourSearchComponent(tourList: List.from(actual)),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                     child: Text(
                       'Актуальные',
-                      style: TextStyle(
-                          fontSize: 17.sp, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
                     )),
                 InkWell(
                     child: MainScreenTourWidget(tourList: actual),
                     onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return TourListScreen(
-                            tourList: actual, title: 'Актуальные туры');
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                        return TourListScreen(tourList: actual, title: 'Актуальные туры');
                       }));
                     }),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
                   child: Text(
                     'Популярное направление',
-                    style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
                   ),
                 ),
                 popularTour != null
                     ? InkWell(
                         onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                             return DetailedScreen(tour: popularTour!);
                           }));
                         },

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/api/api_caller.dart';
+import 'package:flutter_app/api/company_model.dart';
 import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/image_with_progress.dart';
@@ -12,8 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'images_screen.dart';
 
 class BookTourScreen extends StatefulWidget {
-  const BookTourScreen(this.tour, {Key? key, required this.variant})
-      : super(key: key);
+  const BookTourScreen(this.tour, {Key? key, required this.variant}) : super(key: key);
 
   final TourVariant variant;
   final Tour tour;
@@ -23,7 +23,7 @@ class BookTourScreen extends StatefulWidget {
 }
 
 class _BookTourScreenState extends State<BookTourScreen> {
-  var feeds = [];
+  var feeds = <CompanyFeed> [];
   var isLoading = false;
   final apiClient = RestClient(Dio());
 
@@ -69,23 +69,18 @@ class _BookTourScreenState extends State<BookTourScreen> {
                   child: Center(
                       child: Text(
                     widget.tour.name,
-                    style:
-                        TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold),
                   )),
                 ),
                 createInfoLine('Организатор', variant.company.name),
-                createInfoLine(
-                    'Уровень похода', difficultyToStiring(variant.difficulty)),
+                createInfoLine('Уровень похода', difficultyToStiring(variant.difficulty)),
                 createInfoLine('Дата тура', variant.date),
                 createInfoLine('Стоимость', variant.coast.toString()),
                 createInfoLine('Выезд', variant.outTime),
                 createInfoLine('Приезд', variant.backTime),
                 createInfoLine('С собой необходимо взять', variant.neededItems),
-                createInfoLine(
-                    'Фотограф в туре', variant.photographer ? 'есть' : 'нет'),
-                ...variant.details
-                    .map((e) => createInfoLine(e.title, e.description))
-                    .toList(),
+                createInfoLine('Фотограф в туре', variant.photographer ? 'есть' : 'нет'),
+                ...variant.details.map((e) => createInfoLine(e.title, e.description)).toList(),
                 Center(
                   child: Container(
                     width: 1.sw,
@@ -113,8 +108,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                                     width: 1.sw,
                                     child: TextButton(
                                       onPressed: () {
-                                        launch(
-                                            "https://www.telegram.me/${contacts.telegram}");
+                                        launch("https://www.telegram.me/${contacts.telegram}");
                                       },
                                       child: Text('Telegram'),
                                     ),
@@ -127,8 +121,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                                     width: 1.sw,
                                     child: TextButton(
                                       onPressed: () {
-                                        launch(
-                                            "https://wa.me/${contacts.whatsapp}");
+                                        launch("https://wa.me/${contacts.whatsapp}");
                                       },
                                       child: Text('WhatsApp'),
                                     ),
@@ -141,8 +134,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                                     width: 1.sw,
                                     child: TextButton(
                                       onPressed: () {
-                                        launch(
-                                            "https://www.instagram.com/${contacts.instagram}");
+                                        launch("https://www.instagram.com/${contacts.instagram}");
                                       },
                                       child: Text('Instagram'),
                                     ),
@@ -150,9 +142,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                                 );
                               }
 
-                              return Column(
-                                  children: widgetList,
-                                  mainAxisSize: MainAxisSize.min);
+                              return Column(children: widgetList, mainAxisSize: MainAxisSize.min);
                             },
                           );
                         },
@@ -167,8 +157,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
                         children: [
                           createInfoLine('Отзывы', ''),
                           CarouselSlider.builder(
-                            options: CarouselOptions(
-                                viewportFraction: 1, disableCenter: true),
+                            options: CarouselOptions(viewportFraction: 1, disableCenter: true),
                             itemCount: feeds.length,
                             itemBuilder: (context, index, realIndex) {
                               return Row(
@@ -217,17 +206,13 @@ class _BookTourScreenState extends State<BookTourScreen> {
                                               style: TextStyle(fontSize: 18.sp),
                                             ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
+                                              padding: const EdgeInsets.all(8.0),
                                               child: Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
+                                                alignment: Alignment.bottomRight,
                                                 child: Text(
                                                   feeds[index].name,
                                                   style: TextStyle(
-                                                      fontSize: 20.sp,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                      fontSize: 20.sp, fontWeight: FontWeight.bold),
                                                 ),
                                               ),
                                             )
@@ -263,9 +248,7 @@ class _BookTourScreenState extends State<BookTourScreen> {
             color: Colors.black,
           ),
           children: <TextSpan>[
-            new TextSpan(
-                text: '$title: ',
-                style: new TextStyle(fontWeight: FontWeight.bold)),
+            new TextSpan(text: '$title: ', style: new TextStyle(fontWeight: FontWeight.bold)),
             new TextSpan(text: description),
           ],
         ),

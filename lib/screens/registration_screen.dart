@@ -1,10 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_app/api/api_caller.dart';
 import 'package:flutter_app/components/app_bar.dart';
-import 'package:flutter_app/main.dart';
 import 'package:flutter_app/screens/validate_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../main.dart';
 
 class RegistrationScreen extends StatelessWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -28,12 +31,14 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationFormState extends State<RegistrationForm> {
-  var name = '';
-  var email = '';
-  var password = '';
-  var repeatPassword = '';
+  String? login;
+  String? email;
+  String? password;
+  String? repeatPassword;
+  String? name;
   var getEmails = false;
   var isValidated = false;
+  var apiCaller = RestClient(Dio());
 
   final _formKey = GlobalKey<FormState>();
 
@@ -43,15 +48,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
       child: SingleChildScrollView(
         child: isValidated
             ? Expanded(
-              child: Center(
+                child: Center(
                   child: CircularProgressIndicator(),
                 ),
-            )
+              )
             : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 TransparentAppBar(),
                 Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
+                    padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 16.w),
                     child: Text(
                       'Регистрация',
                       style: TextStyle(
@@ -60,111 +64,125 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     )),
                 Form(
                     key: _formKey,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          createForm(
-                              labelText: 'Имя*',
-                              onChanged: (value) {
-                                name = value;
-                              },
-                              validator: (value) {
-                                if (name.isEmpty) return 'Введите имя';
-                              },
-                              type: TextInputType.name),
-                          createForm(
-                              labelText: 'Email*',
-                              onChanged: (value) {
-                                email = value;
-                              },
-                              validator: (value) {
-                                if (email.isEmpty) return 'Введите почту';
-                                if (!email.contains('@')) {
-                                  return 'Введите существующий адрес';
-                                }
-                              },
-                              type: TextInputType.emailAddress),
-                          createForm(
-                              labelText: 'Пароль*',
-                              onChanged: (value) {
-                                password = value;
-                              },
-                              validator: (value) {
-                                if (password.isEmpty) return 'Введите пароль';
-                                if (password.length < 6) {
-                                  return 'Длина пароля должна быть не менее 6 символов';
-                                }
-                              },
-                              type: TextInputType.visiblePassword),
-                          createForm(
-                              labelText: 'Повторите пароль*',
-                              onChanged: (value) {
-                                repeatPassword = value;
-                              },
-                              validator: (value) {
-                                if (repeatPassword.isEmpty) {
-                                  return 'Введите пароль';
-                                }
-                                if (password != repeatPassword) {
-                                  return 'Пароли не совпадают';
-                                }
-                              }),
-                          // Padding(
-                          //     padding: EdgeInsets.fromLTRB(8.w, 8.h, 0, 40.h),
-                          //     child: CheckboxListTile(
-                          //       contentPadding: EdgeInsets.zero,
-                          //       controlAffinity: ListTileControlAffinity.leading,
-                          //       title: Text('Я хочу получать Email рассылку'),
-                          //       onChanged: (bool? value) {
-                          //         setState(() {
-                          //           getEmails = value!;
-                          //         });
-                          //       },
-                          //       value: getEmails,
-                          //     )),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16.h, horizontal: 16.w),
-                            child: SizedBox.fromSize(
-                              size: Size(1.sw, 50.h),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    setState(() {
-                                      isValidated = true;
-                                      toConfirmPage();
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  'Далее',
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      createForm(
+                          initialValue: name,
+                          labelText: 'Повторите пароль*',
+                          onChanged: (value) {
+                            name = value;
+                          },
+                          validator: (value) {
+                            if (name == null || repeatPassword!.isEmpty) {
+                              return 'Введите имя';
+                            }
+                          }),
+                      createForm(
+                          initialValue: login,
+                          labelText: 'Логин*',
+                          onChanged: (value) {
+                            login = value;
+                          },
+                          validator: (value) {
+                            if (login == null || login!.isEmpty) return 'Введите имя';
+                          },
+                          type: TextInputType.name),
+                      createForm(
+                          initialValue: email,
+                          labelText: 'Email*',
+                          onChanged: (value) {
+                            email = value;
+                          },
+                          validator: (value) {
+                            if (email == null || email!.isEmpty)
+                              return 'Введите почту';
+                            else if (!email!.contains('@')) {
+                              return 'Введите существующий адрес';
+                            }
+                          },
+                          type: TextInputType.emailAddress),
+                      createForm(
+                          initialValue: password,
+                          labelText: 'Пароль*',
+                          onChanged: (value) {
+                            password = value;
+                          },
+                          validator: (value) {
+                            if (password == null || password!.isEmpty)
+                              return 'Введите пароль';
+                            else if (password!.length < 6) {
+                              return 'Длина пароля должна быть не менее 6 символов';
+                            }
+                          },
+                          type: TextInputType.visiblePassword),
+                      createForm(
+                          initialValue: repeatPassword,
+                          labelText: 'Повторите пароль*',
+                          onChanged: (value) {
+                            repeatPassword = value;
+                          },
+                          validator: (value) {
+                            if (repeatPassword == null || repeatPassword!.isEmpty) {
+                              return 'Введите пароль';
+                            }
+                            if (password != repeatPassword) {
+                              return 'Пароли не совпадают';
+                            }
+                          }),
+                      // Padding(
+                      //     padding: EdgeInsets.fromLTRB(8.w, 8.h, 0, 40.h),
+                      //     child: CheckboxListTile(
+                      //       contentPadding: EdgeInsets.zero,
+                      //       controlAffinity: ListTileControlAffinity.leading,
+                      //       title: Text('Я хочу получать Email рассылку'),
+                      //       onChanged: (bool? value) {
+                      //         setState(() {
+                      //           getEmails = value!;
+                      //         });
+                      //       },
+                      //       value: getEmails,
+                      //     )),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                        child: SizedBox.fromSize(
+                          size: Size(1.sw, 50.h),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  isValidated = true;
+                                  toConfirmPage();
+                                });
+                              }
+                            },
+                            child: Text(
+                              'Далее',
+                              textAlign: TextAlign.start,
                             ),
                           ),
-                          Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 16.h, horizontal: 16.w),
-                              child: SizedBox.fromSize(
-                                size: Size(1.sw, 50.h),
-                                child: (ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('Отмена'),
-                                )),
-                              ))
-                        ])),
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+                          child: SizedBox.fromSize(
+                            size: Size(1.sw, 50.h),
+                            child: (ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Отмена'),
+                            )),
+                          ))
+                    ])),
               ]),
       ),
     );
   }
 
   Widget createForm(
-      {required String labelText,
+      {required String? labelText,
       required Function(String) onChanged,
       required String? Function(String?) validator,
+      required String? initialValue,
       TextInputType type = TextInputType.text}) {
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
@@ -175,7 +193,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
               focusedBorder: UnderlineInputBorder(),
               disabledBorder: InputBorder.none,
               labelText: labelText),
-          controller: TextEditingController(),
+          controller: TextEditingController(text: initialValue),
           onChanged: onChanged,
           keyboardType: type,
           validator: validator,
@@ -183,8 +201,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
   }
 
   void toConfirmPage() async {
-    await Future.delayed(Duration(milliseconds: 1500));
-    openNewScreen(ValidateScreen(), context);
+    await apiCaller.createUser(email!, login!, password!, name!).then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
+      print(value);
+      openNewScreen(ValidateScreen(), context);
+    }, onError: (error, stackTrace) {
+      print(error);
+      openNewScreen(ValidateScreen(), context);
+      debugPrintStack(stackTrace: stackTrace);
+    });
     setState(() {
       isValidated = false;
     });

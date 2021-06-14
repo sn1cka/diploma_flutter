@@ -8,7 +8,7 @@ part of 'api_caller.dart';
 
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.0.100:8000/';
+    baseUrl ??= 'http://192.168.42.202:8000/';
   }
 
   final Dio _dio;
@@ -45,6 +45,46 @@ class _RestClient implements RestClient {
     var value = _result.data!
         .map((dynamic i) => CompanyFeed.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<String> createUser(email, username, password, firstName) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = {
+      'email': email,
+      'username': username,
+      'password': password,
+      'first_name': firstName
+    };
+    final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            contentType: 'application/x-www-form-urlencoded')
+        .compose(_dio.options, 'api/users/',
+            queryParameters: queryParameters, data: _data)
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data!;
+    return value;
+  }
+
+  @override
+  Future<TokenResponseModel> createToken(username, password) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = {'username': username, 'password': password};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<TokenResponseModel>(Options(
+                method: 'POST',
+                headers: <String, dynamic>{},
+                extra: _extra,
+                contentType: 'application/x-www-form-urlencoded')
+            .compose(_dio.options, 'api/jwt/create/',
+                queryParameters: queryParameters, data: _data)
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = TokenResponseModel.fromJson(_result.data!);
     return value;
   }
 

@@ -8,7 +8,7 @@ part of 'api_caller.dart';
 
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'http://192.168.42.202:8000/';
+    baseUrl ??= 'http://192.168.0.100:8000/';
   }
 
   final Dio _dio;
@@ -49,14 +49,14 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<String> createUser(email, username, password, firstName) async {
+  Future<String> createUser(email, username, password, first_name) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = {
       'email': email,
       'username': username,
       'password': password,
-      'first_name': firstName
+      'first_name': first_name
     };
     final _result = await _dio.fetch<String>(_setStreamType<String>(Options(
             method: 'POST',

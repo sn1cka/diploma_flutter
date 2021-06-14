@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/api/api_caller.dart';
 import 'package:flutter_app/api/tour_model.dart';
+import 'package:flutter_app/components/app_bar.dart';
+import 'package:flutter_app/components/drawer.dart';
 import 'package:flutter_app/components/main_screen_tours_widget.dart';
 import 'package:flutter_app/components/search_component.dart';
 import 'package:flutter_app/local_models/settings_model.dart';
@@ -53,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: MyDrawer(),
         body: RefreshIndicator(
           key: refreshKey,
           onRefresh: () async {
@@ -65,46 +68,46 @@ class _MainScreenState extends State<MainScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
-                // TransparentAppBar(),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 4.h),
-                    child: Text(
-                      'Привет, ${settings.name}!',
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
-                    child: Text(
-                      'Куда хочешь поехать?',
-                      style: TextStyle(fontSize: 15.sp),
-                    )),
+                TransparentAppBar(
+                  title: Text(
+                    'Привет, ${settings.name}!\nКуда хочешь поехать?',
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+
                 TourSearchComponent(tourList: List.from(actual)),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                     child: Text(
                       'Актуальные',
-                      style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 17.sp, fontWeight: FontWeight.bold),
                     )),
                 InkWell(
                     child: MainScreenTourWidget(tourList: actual),
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                        return TourListScreen(tourList: actual, title: 'Актуальные туры');
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return TourListScreen(
+                            tourList: actual, title: 'Актуальные туры');
                       }));
                     }),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
                   child: Text(
                     'Популярное направление',
-                    style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
                   ),
                 ),
                 popularTour != null
                     ? InkWell(
                         onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
                             return DetailedScreen(tour: popularTour!);
                           }));
                         },

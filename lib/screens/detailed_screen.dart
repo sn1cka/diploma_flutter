@@ -143,7 +143,7 @@ class _DetailedWidgetState extends State<DetailedWidget> {
         .map(
           (variant) => DataRow(
             cells: [
-              DataCell(Text(variant.company.name)),
+              DataCell(Text(variant.company.name, softWrap: true,)),
               DataCell(Center(
                 child: Text(
                   variant.coast.toString(),

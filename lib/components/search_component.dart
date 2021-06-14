@@ -9,7 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TourSearchComponent extends StatefulWidget {
   // TODO add onwillpop and flags
   //todo add datepicker
-  const TourSearchComponent({Key? key, required this.tourList}) : super(key: key);
+  const TourSearchComponent({Key? key, required this.tourList})
+      : super(key: key);
 
   final List<Tour> tourList;
 
@@ -62,7 +63,8 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
       List<Tour> newList = [];
       List<Tour> mList = List.from(tourList);
       mList.forEach((element) {
-        element.variants = element.variants.where((element) => element.photographer).toList();
+        element.variants =
+            element.variants.where((element) => element.photographer).toList();
         if (element.variants.length > 0) {
           newList.add(element);
         }
@@ -70,11 +72,67 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
       tourList = newList;
     }
     if (coastMin != null) {
-
       List<Tour> newList = [];
       List<Tour> mList = List.from(tourList);
       mList.forEach((element) {
-        element.variants = element.variants.where((element) => element.coast >= coastMin!).toList();
+        element.variants = element.variants
+            .where((element) => element.coast >= coastMin!)
+            .toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
+        }
+      });
+      tourList = newList;
+    }
+
+    if (coastMax != null) {
+      List<Tour> newList = [];
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants
+            .where((element) => element.coast <= coastMax!)
+            .toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
+        }
+      });
+      tourList = newList;
+    }
+
+    if (coastMax != null) {
+      List<Tour> newList = [];
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants
+            .where((element) => element.coast <= coastMax!)
+            .toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
+        }
+      });
+      tourList = newList;
+    }
+    if (maxHeight != null) {
+      List<Tour> newList = [];
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants
+            .where((element) => element.maxHeight <= maxHeight!)
+            .toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
+        }
+      });
+      tourList = newList;
+    }
+
+    if (daysCount != null) {
+      List<Tour> newList = [];
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants
+            .where((element) => element.daysCount == daysCount!)
+            .toList();
         if (element.variants.length > 0) {
           newList.add(element);
         }
@@ -89,105 +147,196 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Padding(
-        padding: EdgeInsets.all(16.w),
-        child: CupertinoSearchTextField(
-            onSuffixTap: () {
-              setState(() {
-                showFilters = !showFilters;
-              });
-            },
-            suffixMode: OverlayVisibilityMode.always,
-            suffixIcon: Icon(Icons.filter_alt_outlined),
-            controller: searchTextController,
-            onChanged: (value) {
-              checkConditions();
-            }),
-      ),
-      Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          children: showFilters
-              ? [
-                  CheckboxListTile(
-                    title: Text('Фотограф в туре'),
-                    value: needPhotographer,
-                    onChanged: (value) {
-                      needPhotographer = value!;
-                      checkConditions();
-                    },
+    return Container(
+      child: Column(children: [
+        Padding(
+          padding: EdgeInsets.all(16.w),
+          child: CupertinoSearchTextField(
+              onSuffixTap: () {
+                setState(() {
+                  showFilters = !showFilters;
+                });
+              },
+              suffixMode: OverlayVisibilityMode.always,
+              suffixIcon: Icon(Icons.filter_alt_outlined),
+              controller: searchTextController,
+              onChanged: (value) {
+                checkConditions();
+              }),
+        ),
+        !showFilters
+            ? Container()
+            : Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Color.fromARGB(12, 118, 118, 128)),
+                  child: Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: Column(
+                      children: [
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.all(0),
+                          selected: needPhotographer,
+                          title: Text('Фотограф в туре'),
+                          value: needPhotographer,
+                          onChanged: (value) {
+                            needPhotographer = value!;
+                            checkConditions();
+                          },
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text('Цена: '),
+                            Container(
+                              width: 100.w,
+                              child: TextField(
+                                controller: coastMinTextController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                    hintText: 'мин.', alignLabelWithHint: true),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  coastMin = int.tryParse(value);
+                                  checkConditions();
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 40.w,
+                            ),
+                            Container(
+                              width: 100.w,
+                              child: TextField(
+                                controller: coastMaxTextController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                    hintText: 'макс.',
+                                    alignLabelWithHint: true),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  coastMax = int.tryParse(value);
+                                  checkConditions();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Количество дней: "),
+                            Container(
+                              width: 50.w,
+                              child: TextField(
+                                controller: daysCountTextController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                    hintText: '*', alignLabelWithHint: true),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  daysCount = int.tryParse(value);
+                                  checkConditions();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Макс. длина пешего пути (м): "),
+                            Container(
+                              width: 50.w,
+                              child: TextField(
+                                controller: maxPathLengthTextController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                    hintText: '*', alignLabelWithHint: true),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  maxPathLength = int.tryParse(value);
+                                  checkConditions();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Макс. высота \n над уровнем моря(м): "),
+                            Container(
+                              width: 50.w,
+                              child: TextField(
+                                controller: maxHeightTextController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                    hintText: '*', alignLabelWithHint: true),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  maxHeight = int.tryParse(value);
+                                  checkConditions();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextButton(
+                            onPressed: () async{
+                              print(await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime.now(),
+                                  lastDate:
+                                      DateTime.now().add(Duration(days: 60))));
+                            },
+                            child: Text('Дата: $date '))
+                      ],
+                    ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Цена: '),
-                      Container(
-                        width: 100.w,
-                        child: TextField(
-                          controller: coastMinTextController,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(hintText: 'мин.', alignLabelWithHint: true),
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            coastMin = int.tryParse(value);
-                            checkConditions();
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: 40.w,
-                      ),
-                      Container(
-                        width: 100.w,
-                        child: TextField(
-                          controller: coastMaxTextController,
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) {
-                            coastMax = int.tryParse(value);
-                            checkConditions();
-                          },
-                        ),
-                      ),
-                    ],
-                  )
+                ),
+              ),
+        Column(
+          children: searchList.isNotEmpty
+              ? [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(
+                            'Всего найдено туров по запросу: ${searchList.length} '),
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: TextButton(
+                              onPressed: () => closeAndClearSearch(),
+                              child: Icon(Icons.close_rounded)),
+                        )
+                      ],
+                    ),
+                  ),
+                  ...searchList
+                      .map(
+                        (e) => InkWell(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return DetailedScreen(tour: e);
+                              }));
+                            },
+                            child: SearchTile(e)),
+                      )
+                      .toList()
                 ]
               : [],
         ),
-      ),
-      Column(
-        children: searchList.isNotEmpty
-            ? [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text('Всего найдено туров по запросу: ${searchList.length} '),
-                      Align(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: TextButton(
-                            onPressed: () => closeAndClearSearch(),
-                            child: Icon(Icons.close_rounded)),
-                      )
-                    ],
-                  ),
-                ),
-                ...searchList
-                    .map(
-                      (e) => InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                              return DetailedScreen(tour: e);
-                            }));
-                          },
-                          child: SearchTile(e)),
-                    )
-                    .toList()
-              ]
-            : [],
-      ),
-    ]);
+      ]),
+    );
   }
 }

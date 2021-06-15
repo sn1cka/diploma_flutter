@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/api/company_model.dart';
 import 'package:flutter_app/main.dart';
+import 'package:flutter_app/screens/feed_screen.dart';
 import 'package:flutter_app/screens/registration_screen.dart';
 import 'package:flutter_app/screens/start_screen.dart';
+import 'package:flutter_app/screens/tour_suggestion_screen.dart';
 import 'package:hive/hive.dart';
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({Key? key}) : super(key: key);
+  MyDrawer({Key? key, required this.companyList}) : super(key: key);
+  List<Company> companyList;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +28,14 @@ class MyDrawer extends StatelessWidget {
             title: Text('Предложить тур'),
             onTap: () {
               Navigator.pop(context);
-              openNewScreen(RegistrationScreen(), context);
+              openNewScreen(SuggestTourScreen(), context);
             },
           ),
           ListTile(
             title: Text('Отзывы о компаниях'),
             onTap: () {
               Navigator.pop(context);
-              openNewScreen(RegistrationScreen(), context);
+              openNewScreen(CompaniesScreen(companyList: companyList), context);
             },
           ),
           ListTile(

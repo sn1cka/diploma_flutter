@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app/api/api_caller.dart';
+import 'package:flutter_app/api/company_model.dart';
 import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/drawer.dart';
@@ -23,12 +24,15 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   var settings = SettingsModel();
   List<Tour> actual = [];
+  List<Company> companyList = [];
   Tour? popularTour;
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   var apiClient = RestClient(Dio());
   var searchList = <Tour>[];
 
-  Future<void> getTours() async {
+  Future<void> refreshApiLists() async {
+    apiClient.getCompanies().then((value) => companyList = value);
+
     apiClient.getAllTours().then((value) {
       setState(() {
         popularTour = value.first;
@@ -48,18 +52,18 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    getTours();
+    refreshApiLists();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: MyDrawer(),
+        drawer: MyDrawer(companyList: companyList),
         body: RefreshIndicator(
           key: refreshKey,
           onRefresh: () async {
-            getTours();
+            refreshApiLists();
             refreshKey.currentState!.show(atTop: false);
           },
           child: SingleChildScrollView(
@@ -68,46 +72,43 @@ class _MainScreenState extends State<MainScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
-                TransparentAppBar(
-                  title: Text(
-                    'Привет, ${settings.name}!\nКуда хочешь поехать?',
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      color: Colors.black,
+                Padding(
+                  padding: EdgeInsets.all(8.w),
+                  child: TransparentAppBar(
+                    title: Text(
+                      'Привет, ${settings.name}!\nКуда хочешь поехать?',
+                      style: TextStyle(
+                        fontSize: 17.sp,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
-
                 TourSearchComponent(tourList: List.from(actual)),
                 Padding(
                     padding: EdgeInsets.fromLTRB(16.w, 4.h, 16.w, 4.h),
                     child: Text(
                       'Актуальные',
-                      style: TextStyle(
-                          fontSize: 17.sp, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
                     )),
                 InkWell(
                     child: MainScreenTourWidget(tourList: actual),
                     onTap: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return TourListScreen(
-                            tourList: actual, title: 'Актуальные туры');
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                        return TourListScreen(tourList: actual, title: 'Актуальные туры');
                       }));
                     }),
                 Padding(
                   padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
                   child: Text(
                     'Популярное направление',
-                    style:
-                        TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.bold),
                   ),
                 ),
                 popularTour != null
                     ? InkWell(
                         onTap: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                             return DetailedScreen(tour: popularTour!);
                           }));
                         },

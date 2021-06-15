@@ -287,14 +287,17 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
                             ),
                           ],
                         ),
-                        TextButton(
+                        ElevatedButton(
                             onPressed: () async{
-                              print(await showDatePicker(
+                              date = (await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
                                   firstDate: DateTime.now(),
                                   lastDate:
                                       DateTime.now().add(Duration(days: 60))));
+                              setState(() {
+
+                              });
                             },
                             child: Text('Дата: $date '))
                       ],

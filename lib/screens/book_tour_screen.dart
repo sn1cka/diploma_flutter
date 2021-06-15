@@ -8,6 +8,7 @@ import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/components/image_with_progress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'images_screen.dart';
@@ -23,9 +24,12 @@ class BookTourScreen extends StatefulWidget {
 }
 
 class _BookTourScreenState extends State<BookTourScreen> {
-  var feeds = <CompanyFeed> [];
+  var feeds = <CompanyFeed>[];
   var isLoading = false;
   final apiClient = RestClient(Dio());
+  final dateTimeDtf = DateFormat('dd.MM.yyyy HH:mm');
+  final timeDtf = DateFormat('Hm');
+  var dateTime = DateTime.now();
 
   Future<void> getFeeds() async {
     apiClient.getCompanyFeedsById(widget.variant.company.id).then((value) {
@@ -76,9 +80,13 @@ class _BookTourScreenState extends State<BookTourScreen> {
                 createInfoLine('Уровень похода', difficultyToStiring(variant.difficulty)),
                 createInfoLine('Дата тура', variant.date),
                 createInfoLine('Стоимость', variant.coast.toString()),
-                createInfoLine('Выезд', variant.outTime),
-                createInfoLine('Приезд', variant.backTime),
+                createInfoLine('Выезд', timeDtf.format(DateTime.parse(variant.outTime))),
+                createInfoLine('Приезд', dateTimeDtf.format(DateTime.parse(variant.backTime))),
                 createInfoLine('С собой необходимо взять', variant.neededItems),
+                createInfoLine('Количество дней', variant.daysCount.toString()),
+                createInfoLine('Начальная высота над уровнем моря (м)', variant.startHeight.toString()),
+                createInfoLine('Максимальная высота над уровнем моря (м)', variant.maxHeight.toString()),
+                createInfoLine('Общая длина пешего пути (м)', variant.pathLength.toString()),
                 createInfoLine('Фотограф в туре', variant.photographer ? 'есть' : 'нет'),
                 ...variant.details.map((e) => createInfoLine(e.title, e.description)).toList(),
                 Center(

@@ -139,6 +139,19 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
       });
       tourList = newList;
     }
+    if (maxPathLength != null) {
+      List<Tour> newList = [];
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants
+            .where((element) => element.pathLength < element.pathLength!)
+            .toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
+        }
+      });
+      tourList = newList;
+    }
 
     setState(() {
       searchList = List.from(tourList);

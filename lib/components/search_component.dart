@@ -144,7 +144,7 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
       List<Tour> mList = List.from(tourList);
       mList.forEach((element) {
         element.variants = element.variants
-            .where((element) => element.pathLength < element.pathLength!)
+            .where((element) => maxPathLength! <= element.pathLength)
             .toList();
         if (element.variants.length > 0) {
           newList.add(element);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/api/api_caller.dart';
 import 'package:flutter_app/components/app_bar.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
+import 'package:dio/dio.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -25,8 +27,9 @@ class LoginForms extends StatefulWidget {
 }
 
 class _LoginFormsState extends State<LoginForms> {
-  var email = '';
+  var login = '';
   var password = '';
+  final apiCaller = RestClient(Dio());
 
   final _formKey = GlobalKey<FormState>();
 
@@ -52,15 +55,12 @@ class _LoginFormsState extends State<LoginForms> {
                     createForm(
                         labelText: 'Email*',
                         onChanged: (value) {
-                          email = value;
+                          login = value;
                         },
                         validator: (value) {
-                          if (email.isEmpty) return 'Введите почту';
-                          if (!email.contains('@')) {
-                            return 'Введите существующий адрес';
-                          }
+                          if (login.isEmpty) return 'Введите логин';
                         },
-                        type: TextInputType.emailAddress),
+                        type: TextInputType.name),
                     createForm(
                         labelText: 'Пароль*',
                         onChanged: (value) {
@@ -84,9 +84,6 @@ class _LoginFormsState extends State<LoginForms> {
                                 password == 'test1234.') {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Выполняется вход')));
-                              await Future.delayed(Duration(seconds: 1));
-                              Hive.box('MyBox').put('isAuthorized', true);
-                              openNewScreen(MainScreen(), context,needReplace: true);
                             }
                           },
                           child: Text(
@@ -112,6 +109,17 @@ class _LoginFormsState extends State<LoginForms> {
         ]),
       ),
     );
+  }
+
+  void auth() {
+    apiCaller.createToken(login, password).then((value) {
+      if (value.accessToken != null) {
+        Hive.box('MyBox').put('isAuthorized', true);
+        openNewScreen(MainScreen(), context, needReplace: true);
+      } else
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(value.detail ?? 'Неверные данные для авторизации')));
+    });
   }
 
   Widget createForm({required String labelText,

@@ -29,6 +29,7 @@ class LoginForms extends StatefulWidget {
 class _LoginFormsState extends State<LoginForms> {
   var login = '';
   var password = '';
+  var isLoading = false;
   final apiCaller = RestClient(Dio());
 
   final _formKey = GlobalKey<FormState>();
@@ -68,9 +69,7 @@ class _LoginFormsState extends State<LoginForms> {
                         },
                         validator: (value) {
                           if (password.isEmpty) return 'Введите пароль';
-                          if (password.length < 6) {
-                            return 'Длина пароля должна быть не менее 6 символов';
-                          }
+
                         },
                         type: TextInputType.visiblePassword),
                     Padding(
@@ -80,13 +79,13 @@ class _LoginFormsState extends State<LoginForms> {
                         size: Size(1.sw, 50.w),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
+                            if (!isLoading && _formKey.currentState!.validate()) {
                               // ScaffoldMessenger.of(context).showSnackBar(
                               //     SnackBar(content: Text('Выполняется вход')));
                               auth();
                             }
                           },
-                          child: Text(
+                          child: isLoading? CircularProgressIndicator(): Text(
                             'Далее',
                             textAlign: TextAlign.start,
                           ),
@@ -112,14 +111,26 @@ class _LoginFormsState extends State<LoginForms> {
   }
 
   void auth() {
+    setState(() {
+      isLoading = true;
+    });
     apiCaller.createToken(login, password).then((value) {
       if (value.accessToken != null) {
         Hive.box('MyBox').put('isAuthorized', true);
+        Hive.box('MyBox').put('token', value.accessToken);
         openNewScreen(MainScreen(), context, needReplace: true);
+        setState(() {
+          isLoading = false;
+        });
       } else
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.detail ?? 'Неверные данные для авторизации')));
-    }, onError: (error){
+    }, onError: (error, stackTrace){
+      setState(() {
+        isLoading = false;
+      });
+      print(error);
+      print(stackTrace);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Неверные данные для авторизации')));
     });

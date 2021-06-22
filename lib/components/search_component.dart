@@ -5,6 +5,7 @@ import 'package:flutter_app/api/tour_model.dart';
 import 'package:flutter_app/components/search_tile.dart';
 import 'package:flutter_app/screens/detailed_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 class TourSearchComponent extends StatefulWidget {
   // TODO add onwillpop and flags
@@ -25,6 +26,7 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
   final maxPathLengthTextController = TextEditingController();
   final daysCountTextController = TextEditingController();
   final maxHeightTextController = TextEditingController();
+  final dtf = DateFormat('dd.MM.yyyy');
 
   bool showFilters = false;
   bool needPhotographer = false;
@@ -33,7 +35,7 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
   int? maxHeight;
   int? maxPathLength;
   int? daysCount;
-  DateTime? date;
+  String? date;
   List<Tour> searchList = [];
 
   void closeAndClearSearch() {
@@ -152,9 +154,22 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
       });
       tourList = newList;
     }
+    if (date != null && date!.isNotEmpty) {
+      List<Tour> newList = [];
+      List<Tour> mList = List.from(tourList);
+      mList.forEach((element) {
+        element.variants = element.variants
+            .where((element) => date! == element.date)
+            .toList();
+        if (element.variants.length > 0) {
+          newList.add(element);
+        }
+      });
+      tourList = newList;
+    }
 
     setState(() {
-      searchList = List.from(tourList);
+      searchList = tourList;
     });
   }
 
@@ -301,16 +316,14 @@ class _TourSearchComponentState extends State<TourSearchComponent> {
                           ],
                         ),
                         ElevatedButton(
-                            onPressed: () async{
-                              date = (await showDatePicker(
+                            onPressed: () async {
+                              date = dtf.format((await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
                                   firstDate: DateTime.now(),
-                                  lastDate:
-                                      DateTime.now().add(Duration(days: 60))));
-                              setState(() {
-
-                              });
+                                  lastDate: DateTime.now()
+                                      .add(Duration(days: 60))))!);
+                              checkConditions();
                             },
                             child: Text('Дата: $date '))
                       ],

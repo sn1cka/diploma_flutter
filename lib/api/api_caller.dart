@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_app/api/company_model.dart';
 import 'package:flutter_app/api/tour_model.dart';
@@ -21,16 +23,25 @@ abstract class RestClient {
 
   @POST('api/users/')
   @FormUrlEncoded()
-  Future<String> createUser(
-      @Field() String email,
-      @Field() String username,
-      @Field() String password,
-      @Field() String first_name);
+  Future<String> createUser(@Field() String email, @Field() String username,
+      @Field() String password, @Field() String first_name);
 
   @POST('api/jwt/create/')
   @FormUrlEncoded()
   Future<TokenResponseModel> createToken(
     @Field() String username,
     @Field() String password,
+  );
+
+  @GET('api/users/me/')
+  Future<TokenResponseModel> getUser();
+
+  @MultiPart()
+  @POST('api/feeds')
+  Future<TokenResponseModel> postFeed(
+    @Part(name: 'photo' ) File photo,
+    @Field() int company,
+    @Field() String name,
+    @Field() String feed,
   );
 }

@@ -11,6 +11,8 @@ ResponseModel _$ResponseModelFromJson(Map<String, dynamic> json) {
     detail: json['detail'] as String?,
     username: json['username'] as String?,
     password: json['password'] as String?,
+    id: json['id'] as int?,
+    first_name: json['first_name'] as String?,
   );
 }
 
@@ -19,6 +21,8 @@ Map<String, dynamic> _$ResponseModelToJson(ResponseModel instance) =>
       'detail': instance.detail,
       'username': instance.username,
       'password': instance.password,
+      'first_name': instance.first_name,
+      'id': instance.id,
     };
 
 TokenResponseModel _$TokenResponseModelFromJson(Map<String, dynamic> json) {
@@ -28,7 +32,9 @@ TokenResponseModel _$TokenResponseModelFromJson(Map<String, dynamic> json) {
   )
     ..detail = json['detail'] as String?
     ..username = json['username'] as String?
-    ..password = json['password'] as String?;
+    ..password = json['password'] as String?
+    ..first_name = json['first_name'] as String?
+    ..id = json['id'] as int?;
 }
 
 Map<String, dynamic> _$TokenResponseModelToJson(TokenResponseModel instance) =>
@@ -36,6 +42,8 @@ Map<String, dynamic> _$TokenResponseModelToJson(TokenResponseModel instance) =>
       'detail': instance.detail,
       'username': instance.username,
       'password': instance.password,
+      'first_name': instance.first_name,
+      'id': instance.id,
       'refresh': instance.tokenRefresh,
       'access': instance.accessToken,
     };

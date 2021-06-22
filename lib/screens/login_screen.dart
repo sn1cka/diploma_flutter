@@ -54,7 +54,7 @@ class _LoginFormsState extends State<LoginForms> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     createForm(
-                        labelText: 'Email*',
+                        labelText: 'Логин*',
                         onChanged: (value) {
                           login = value;
                         },
@@ -80,8 +80,6 @@ class _LoginFormsState extends State<LoginForms> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (!isLoading && _formKey.currentState!.validate()) {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //     SnackBar(content: Text('Выполняется вход')));
                               auth();
                             }
                           },

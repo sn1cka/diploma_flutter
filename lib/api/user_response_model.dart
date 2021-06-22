@@ -7,8 +7,11 @@ class ResponseModel {
   String? detail;
   String? username;
   String? password;
+  String? first_name;
 
-  ResponseModel({this.detail, this.username, this.password});
+  int? id;
+
+  ResponseModel({this.detail, this.username, this.password, this.id, this.first_name});
 
   factory ResponseModel.fromJson(Map<String, dynamic> json) => _$ResponseModelFromJson(json);
 

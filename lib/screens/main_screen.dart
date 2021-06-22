@@ -35,6 +35,7 @@ class _MainScreenState extends State<MainScreen> {
 
     apiClient.getAllTours().then((value) {
       setState(() {
+        value.sort((a,b) => -a.variants.length.compareTo(b.variants.length));
         popularTour = value.first;
         actual = value;
       });

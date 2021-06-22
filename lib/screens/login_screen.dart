@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/api/api_caller.dart';
 import 'package:flutter_app/components/app_bar.dart';
@@ -5,7 +6,6 @@ import 'package:flutter_app/main.dart';
 import 'package:flutter_app/screens/main_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
-import 'package:dio/dio.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -80,10 +80,10 @@ class _LoginFormsState extends State<LoginForms> {
                         size: Size(1.sw, 50.w),
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_formKey.currentState!.validate() &&
-                                password == 'test1234.') {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Выполняется вход')));
+                            if (_formKey.currentState!.validate()) {
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //     SnackBar(content: Text('Выполняется вход')));
+                              auth();
                             }
                           },
                           child: Text(
@@ -119,13 +119,17 @@ class _LoginFormsState extends State<LoginForms> {
       } else
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(value.detail ?? 'Неверные данные для авторизации')));
+    }, onError: (error){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Неверные данные для авторизации')));
     });
   }
 
-  Widget createForm({required String labelText,
-    required Function(String) onChanged,
-    required String? Function(String?) validator,
-    TextInputType type = TextInputType.text}) {
+  Widget createForm(
+      {required String labelText,
+      required Function(String) onChanged,
+      required String? Function(String?) validator,
+      TextInputType type = TextInputType.text}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
       child: TextFormField(
